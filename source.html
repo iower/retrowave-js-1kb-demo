@@ -1,0 +1,287 @@
+<canvas id="a"></canvas>
+<script>
+	var sceneWidth = a.width = 1280, sceneHeight = a.height = 720, c = a.getContext('2d');
+
+	rand = (param1, param2) => param2 ? param1 + Math.random() * (param2 - param1) : Math.random() * param1;
+	
+	rgba = (r, g, b, a) => 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+
+	r = (n, f) => { for (j = 0; n > j; f(j++)); };
+
+	rect = (x, y, w, h, style) => {
+		if (style) c.fillStyle = style;
+		c.fillRect(x, y, w, h);
+	};
+
+	line = (x, y, a, b, style) => {
+		if (style) c.strokeStyle = style;
+		c.beginPath();
+		c.moveTo(x, y);
+		c.lineTo(a, b);
+		c.stroke();
+		c.closePath();
+	};
+
+	// Darkness
+	rect(0, 0, sceneWidth, sceneHeight, rgba(0,0,0));
+	
+	// Stars
+	r(3e3, () => {
+		var size = rand(2);
+		rect(rand(sceneWidth), rand(sceneHeight), size, size, rgba(255 - rand(100), 255 - rand(100), 255 - rand(100), rand(1)));
+	});
+	
+
+	// Sky gradient
+	var steps = 15;
+	r(steps, (i) => rect(0, sceneHeight/2 - 15 * i, sceneWidth, steps, rgba(140, 60, 133, 1-i/steps)) );
+
+
+
+	// Sun
+	r(10, (i) => {
+		c.fillStyle = rgba(300, 100, 0, 0 + i * 0.1);
+		c.beginPath();
+		c.arc(sceneWidth / 2, sceneHeight / 2, 120 - i * 2, 0, Math.PI, true);
+		c.fill();
+	});
+
+
+	// Earth
+	rect(0, sceneHeight / 2, sceneWidth, sceneHeight / 2, rgba(50, 0, 80, 1));
+
+	// Grid
+	r(20, (i) => line(sceneWidth/2, sceneHeight/2, sceneWidth - sceneWidth / 19 * i, sceneHeight, rgba(100, 100, 255, 1)));
+
+	r(22, (i) => {
+		var y = sceneHeight/2 + 1 * Math.pow(1.3, i);
+		line(0, y, sceneWidth, y);
+	});
+	
+
+
+	// City
+	size = 20;
+	numberOfBuildings = Math.floor(sceneWidth / size);
+	tolerance = Math.floor(size * .3);
+	r(numberOfBuildings, (i) => rect(i * size, sceneHeight/2, rand(size-tolerance, size+tolerance), -rand(size-tolerance, size+tolerance), rgba(30, 0, 50, 1)) );
+
+	
+	// Mountains
+	var mountain = (x1, y1, x2, y2, x3, y3, style, deepness) => {
+
+		var dots = [[x1, y1], [x2, y2], [x3, y3]];
+
+		var addDots = (dots, depth) => {
+			var edgeness = 5;
+			
+			for (var i = dots.length - 1; i >= 1; i--) {
+				var x1 = dots[i-1][0], y1 = dots[i-1][1], x2 = dots[i][0], y2 = dots[i][1];
+				var newDotX = (x2 + x1) / 2 + rand(-(x2 - x1)/edgeness, (x2 - x1)/edgeness);
+				var newDotY = (y2 + y1) / 2 + rand(-(y2 - y1)/edgeness, (y2 - y1)/edgeness);
+				dots.splice(i, 0, [newDotX, newDotY]);
+			}
+			
+			return --depth ? addDots(dots, depth) : dots;
+		};
+		
+		dots = addDots(dots, 7);
+
+		c.strokeStyle = c.fillStyle = style;
+		c.beginPath();
+		for (var i = 0; i < dots.length; i++) {
+			var dot = dots[i];
+			c.lineTo(dot[0], dot[1]);
+		}
+		
+		c.lineTo(dots[0][0], dots[0][1]);
+		c.stroke();
+		c.closePath();
+		c.fill();
+	};
+
+	style = rgba(25, 0, 25, 1);
+	mountain(sceneWidth*3/5, sceneHeight/2, sceneWidth*4/5, sceneHeight/2-100, sceneWidth*6/5, sceneHeight/2, style);
+	mountain(sceneWidth*-1/5, sceneHeight/2, sceneWidth*1/5, sceneHeight/2-100, sceneWidth*2/5, sceneHeight/2, style);
+
+
+	// Palm
+	/*
+	var style = rgba(152, 0, 174, 1);
+
+	var palm = (palmX, palmY, scale = 1) => {
+		
+		var steps = 20;
+		var nonlinearity = rand(1.15, 1.25);
+		var right = Math.round(rand(1));
+		for (var i = 0; i < steps; i++) {
+			var size = (20 - (i*10/steps)) * scale;
+			var palmDotX = right ? (palmX - Math.pow(nonlinearity, i) * scale) - size/2 : (palmX + Math.pow(nonlinearity, i) * scale) - size/2;
+			var palmDotY = palmY - (20 * i) * scale - size/2;
+			rect(palmDotX, palmDotY, size, size, style);
+			
+			if (i == steps - 1) {
+				//branch(palmDotX, palmDotY, 0);
+				//branch(palmDotX, palmDotY, 1);
+			}
+			
+		}
+
+	};
+
+	var branch = (branchStartX, branchStartY, left) => {
+		var branchSize = 2;
+		var branchSteps = 60;
+		
+		for (var j = 0; j < branchSteps; j++) {
+			var branchDotX = left ? branchStartX - j * branchSize : branchStartX + j * branchSize;
+			var branchDotY = branchStartY + Math.pow(1.07, j);
+			rect(branchDotX, branchDotY, branchSize, branchSize, style);
+
+			if (j % 3 == 0) {
+				leaf(branchDotX, branchDotY, left, branchSteps, j);
+			}
+		}
+	};
+
+	var leaf = (leafStartX, leafStartY, left, branchSteps, branchStep) => {
+		var leafSteps = rand(15, 20) * (branchSteps - branchStep)/branchSteps; // ?
+		var leafDotSize = 2;
+		for (var k = 0; k < leafSteps; k++) {
+			var leafDotX = left ? leafStartX + Math.pow(1.05, k) : leafStartX - Math.pow(0.8, k);
+			var leafDotY = leafStartY + k * leafDotSize;
+			rect(leafDotX, leafDotY, leafDotSize, leafDotSize, style);
+		}
+	};
+
+	var steps = 10;
+	for (var i = 0; i < steps; i++) {
+		xLeft = sceneWidth/2 * i / steps;
+		xRight = sceneWidth - sceneWidth/2 * i / steps;
+		y = sceneHeight - xLeft * sceneHeight/sceneWidth;
+		scale = 1 * 1 - (i / steps);
+		//rect(x, y, 1, 1, rgba(255,255,255,1));
+		palm(xLeft, y, scale);
+		palm(xRight, y, scale);
+	}
+	*/
+
+
+
+	/*
+		// Palm
+
+	var palm = (palmX, palmY, right, scale = 1) => {
+		var style = rgba(152, 0, 174, 1);
+		var steps = 20;
+		var nonlinearity = rand(1.2, 1.3);
+		for (var i = 0; i < steps; i++) {
+			var size = 20 - (i*10/steps);
+			size *= scale;
+			var x = right ? (palmX - Math.pow(nonlinearity, i)) * scale : (palmX + Math.pow(nonlinearity, i)) * scale;
+			var y = palmY - 20 * i;
+			y *= scale;
+			rect(x, y, size, size, style);
+			if (i == steps - 1) {
+				var steps2 = 60;
+				var size2 = 2;
+				for (var j = 0; j < steps2; j++) {
+					
+					var branch = (left) => {
+						var xx = left ? x - j * size2 : x + j * size2;
+						var yy = y + Math.pow(1.07, j);
+						rect(xx, yy, size2, size2, style);
+
+						if (j % 3 == 0) {
+							var steps3 = rand(15, 20) * (steps2 - j)/steps2;
+							var size3 = 2;
+							for (var k = 0; k < steps3; k++) {
+								var xxx = left ? xx + Math.pow(1.05, k) : xx - Math.pow(1.05, k);
+								var yyy = yy + k * size3;
+								rect(xxx, yyy, size3, size3, style);
+							}
+						}
+					}
+
+					branch(0);
+					branch(1);
+					
+				}
+			}
+			
+		}
+
+	}
+
+	palm(150, 600);
+	palm(1000, 550, 1);
+	palm(1200, 550, 1, 0.5);
+	*/
+
+	// Grid
+	
+	period = 128;
+	for (var k = 1; k <= 4; k++) {
+		var j = 0;
+		for (var i = 0; i <= sceneWidth; i++) {
+			c.fillStyle = rgba(255, 255, 255, (j/period)*.014);
+			rect(i, 0, 1, sceneHeight);
+			rect(0, i, sceneWidth, 1);
+			j = j == period-1 ? 0 : j + 1;
+		}
+		period = Math.floor(period/2);
+	}
+	
+	
+	// Screenlines
+	for (var h = 0; h < sceneHeight; h = h + 5)
+		rect(0, h, sceneWidth, 2, rgba(255, 255, 255, .08));
+	
+	for (var h = 0; h < sceneHeight; h = h + 23)
+		rect(0, h, sceneWidth, 9, rgba(255, 255, 255, .05));
+
+	
+	
+	// ScreenCorners
+	var max = 300;
+	for (var i = 0; i <= max; i++) {
+		c.fillStyle = rgba(0, 0, 0, (1-i/max)*0.4);
+		rect(i, 0, 1, sceneHeight);
+		rect(sceneWidth - i, 0, 1, sceneHeight);
+		rect(0, i, sceneWidth, 1);
+		rect(0, sceneHeight - i, sceneWidth, 1);
+	}
+	
+
+
+
+	/* TODO
+		Source
+			Scene
+				+ Darkness
+				Sky 
+					+ Stars
+					+ Gradient
+					+ Sun
+					Planets
+					Clouds
+				Road
+					Grid gradient
+				City
+					+ Buildings
+						Windows
+				+ Mountains
+				Palms
+				Screen-effect
+					+ Lines
+					+ Light-Corners
+					+ Grid
+					Gems
+				Sound
+			Code
+				rgb to rgba
+		Minifier
+			tokenizer
+	*/
+
+</script>
