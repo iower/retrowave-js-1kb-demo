@@ -4,11 +4,11 @@
 		<textarea id="source" autocomplete="off">
 <canvas id="a"></canvas>
 <script>
-	var sceneWidth = a.width = 1280, sceneHeight = a.height = 720, c = a.getContext('2d');
+	var sceneWidth = a.width = 1280, sceneHeight = a.height = 720, c = a.getContext('2d'), full = 255;
 
 	rnd = (param1, param2) => param2 ? param1 + Math.random() * (param2 - param1) : Math.random() * param1;
 	
-	color = (r, g, b, a) => 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+	color = (r, g, b, a=1) => 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
 
 	r = (n, f) => { for (j = 0; n > j; f(j++)); };
 
@@ -32,7 +32,7 @@
 	// Stars
 	r(3e3, () => {
 		var size = rnd(2);
-		rect(rnd(sceneWidth), rnd(sceneHeight), size, size, color(255 - rnd(100), 255 - rnd(100), 255 - rnd(100), rnd(1)));
+		rect(rnd(sceneWidth), rnd(sceneHeight), size, size, color(full - rnd(100), full - rnd(100), full - rnd(100), rnd(1)));
 	});
 	
 
@@ -52,10 +52,10 @@
 
 
 	// Earth
-	rect(0, sceneHeight / 2, sceneWidth, sceneHeight / 2, color(50, 0, 80, 1));
+	rect(0, sceneHeight / 2, sceneWidth, sceneHeight / 2, color(50, 0, 80));
 
 	// Grid
-	r(20, (i) => drawLine(sceneWidth/2, sceneHeight/2, sceneWidth - sceneWidth / 19 * i, sceneHeight, color(100, 100, 255, 1)));
+	r(20, (i) => drawLine(sceneWidth/2, sceneHeight/2, sceneWidth - sceneWidth / 19 * i, sceneHeight, color(100, 100, full)));
 
 	r(22, (i) => {
 		var y = sceneHeight/2 + 1 * Math.pow(1.3, i);
@@ -68,7 +68,7 @@
 	size = 20;
 	numberOfBuildings = Math.floor(sceneWidth / size);
 	tolerance = Math.floor(size * .3);
-	r(numberOfBuildings, (i) => rect(i * size, sceneHeight/2, rnd(size-tolerance, size+tolerance), -rnd(size-tolerance, size+tolerance), color(30, 0, 50, 1)) );
+	r(numberOfBuildings, (i) => rect(i * size, sceneHeight/2, rnd(size-tolerance, size+tolerance), -rnd(size-tolerance, size+tolerance), color(30, 0, 50)) );
 
 	
 	// Mountains
@@ -103,15 +103,15 @@
 		c.closePath();
 		c.fill();
 	};
-
-	style = color(25, 0, 25, 1);
+	
+	style = color(25, 0, 25);
 	mountain(sceneWidth*3/5, sceneHeight/2, sceneWidth*4/5, sceneHeight/2-100, sceneWidth*6/5, sceneHeight/2, style);
 	mountain(sceneWidth*-1/5, sceneHeight/2, sceneWidth*1/5, sceneHeight/2-100, sceneWidth*2/5, sceneHeight/2, style);
 
 
 	// Palm
 	/*
-	var style = color(152, 0, 174, 1);
+	var style = color(152, 0, 174);
 
 	var palm = (palmX, palmY, scale = 1) => {
 		
@@ -164,7 +164,7 @@
 		xRight = sceneWidth - sceneWidth/2 * i / steps;
 		y = sceneHeight - xLeft * sceneHeight/sceneWidth;
 		scale = 1 * 1 - (i / steps);
-		//rect(x, y, 1, 1, color(255,255,255,1));
+		//rect(x, y, 1, 1, color(full,full,full));
 		palm(xLeft, y, scale);
 		palm(xRight, y, scale);
 	}
@@ -176,7 +176,7 @@
 		// Palm
 
 	var palm = (palmX, palmY, right, scale = 1) => {
-		var style = color(152, 0, 174, 1);
+		var style = color(152, 0, 174);
 		var steps = 20;
 		var nonlinearity = rnd(1.2, 1.3);
 		for (var i = 0; i < steps; i++) {
@@ -228,7 +228,7 @@
 	for (var k = 1; k <= 4; k++) {
 		var j = 0;
 		for (var i = 0; i <= sceneWidth; i++) {
-			c.fillStyle = color(255, 255, 255, (j/period)*.014);
+			c.fillStyle = color(full, full, full, (j/period)*.014);
 			rect(i, 0, 1, sceneHeight);
 			rect(0, i, sceneWidth, 1);
 			j = j == period-1 ? 0 : j + 1;
@@ -239,10 +239,10 @@
 	
 	// Screenlines
 	for (var h = 0; h < sceneHeight; h = h + 5)
-		rect(0, h, sceneWidth, 2, color(255, 255, 255, .08));
+		rect(0, h, sceneWidth, 2, color(full, full, full, .08));
 	
 	for (var h = 0; h < sceneHeight; h = h + 23)
-		rect(0, h, sceneWidth, 9, color(255, 255, 255, .05));
+		rect(0, h, sceneWidth, 9, color(full, full, full, .05));
 
 	
 	
