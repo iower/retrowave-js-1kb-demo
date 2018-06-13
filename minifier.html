@@ -4,7 +4,7 @@
 		<textarea id="source" autocomplete="off">
 <canvas id="a"></canvas>
 <script>
-	var sceneWidth = a.width = 1280, sceneHeight = a.height = 720, c = a.getContext('2d'), beginPathAlias = () => c.beginPath(), strokeAlias = () => c.stroke(), closePathAlias = () => c.closePath(), full = 255, m = Math;
+	var sceneWidth = a.width = 1280, sceneHeight = a.height = 720, c = a.getContext('2d'), beginPathAlias = () => c.beginPath(), strokeAlias = () => c.stroke(), closePathAlias = () => c.closePath(), full = 255, m = Math, mfloor = m.floor;
 
 	rnd = (param1, param2) => param2 ? param1 + m.random() * (param2 - param1) : m.random() * param1;
 	
@@ -67,8 +67,8 @@
 
 	// City
 	size = 20;
-	numberOfBuildings = m.floor(sceneWidth / size);
-	tolerance = m.floor(size * .3);
+	numberOfBuildings = mfloor(sceneWidth / size);
+	tolerance = mfloor(size * .3);
 	r(numberOfBuildings, (i) => rect(i * size, sceneHeight/2, rnd(size-tolerance, size+tolerance), -rnd(size-tolerance, size+tolerance), color(30, 0, 50)) );
 
 	
@@ -234,7 +234,7 @@
 			rect(0, i, sceneWidth, 1);
 			j = j == period-1 ? 0 : j + 1;
 		}
-		period = m.floor(period/2);
+		period = mfloor(period/2);
 	}
 	
 	
