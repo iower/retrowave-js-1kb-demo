@@ -1,6 +1,16 @@
 <canvas id="a"></canvas>
 <script>
-	var sceneWidth = a.width = 1280, sceneHeight = a.height = 720, c = a.getContext('2d'), beginPathAlias = () => c.beginPath(), strokeAlias = () => c.stroke(), closePathAlias = () => c.closePath(), full = 255, m = Math, mfloor = m.floor;
+	var sceneWidth = a.width = 1280,
+		sceneHeight = a.height = 720,
+		c = a.getContext('2d'),
+		beginPathAlias = () => c.beginPath(),
+		strokeAlias = () => c.stroke(),
+		closePathAlias = () => c.closePath(),
+		lineToAlias = (x, y) => c.lineTo(x, y), // may be removed in future, two extra bytes
+		fillStyleAlias = (s) => c.fillStyle = s,
+		full = 255,
+		m = Math,
+		mfloor = m.floor;
 
 	rnd = (param1, param2) => param2 ? param1 + m.random() * (param2 - param1) : m.random() * param1;
 	
@@ -9,7 +19,7 @@
 	r = (n, f) => { for (j = 0; n > j; f(j++)); };
 
 	rect = (x, y, w, h, style) => {
-		if (style) c.fillStyle = style;
+		if (style) fillStyleAlias(style);
 		c.fillRect(x, y, w, h);
 	};
 
@@ -17,7 +27,7 @@
 		if (style) c.strokeStyle = style;
 		beginPathAlias();
 		c.moveTo(x, y);
-		c.lineTo(a, b);
+		lineToAlias(a, b);
 		strokeAlias();
 		closePathAlias();
 	};
@@ -40,7 +50,7 @@
 
 	// Sun
 	r(10, (i) => {
-		c.fillStyle = color(300, 100, 0, 0 + i * 0.1);
+		fillStyleAlias(color(full, 100, 0, 0 + i * 0.1));
 		beginPathAlias();
 		c.arc(sceneWidth / 2, sceneHeight / 2, 120 - i * 2, 0, m.PI, 1);
 		c.fill();
@@ -69,7 +79,7 @@
 
 	
 	// Mountains
-	var mountain = (x1, y1, x2, y2, x3, y3, style, deepness) => {
+	var mountain = (x1, y1, x2, y2, x3, y3, style) => {
 
 		var dots = [[x1, y1], [x2, y2], [x3, y3]];
 
@@ -88,14 +98,14 @@
 		
 		dots = addDots(dots, 7);
 
-		c.strokeStyle = c.fillStyle = style;
+		fillStyleAlias(style);
+		c.strokeStyle = style;
 		beginPathAlias();
 		for (var i = 0; i < dots.length; i++) {
 			var dot = dots[i];
-			c.lineTo(dot[0], dot[1]);
+			lineToAlias(dot[0], dot[1]);
 		}
-		
-		c.lineTo(dots[0][0], dots[0][1]);
+		lineToAlias(dots[0][0], dots[0][1]);
 		strokeAlias();
 		closePathAlias();
 		c.fill();
@@ -225,7 +235,7 @@
 	for (var k = 1; k <= 4; k++) {
 		var j = 0;
 		for (var i = 0; i <= sceneWidth; i++) {
-			c.fillStyle = color(full, full, full, (j/period)*.014);
+			fillStyleAlias(color(full, full, full, (j/period)*.014));
 			rect(i, 0, 1, sceneHeight);
 			rect(0, i, sceneWidth, 1);
 			j = j == period-1 ? 0 : j + 1;
@@ -235,6 +245,13 @@
 	
 	
 	// Screenlines
+	/*screenLines = (width, gap, opacity) => {
+		for (var h = 0; h < sceneHeight; h = h + gap)
+			rect(0, h, sceneWidth, width, color(full, full, full, .08));
+	};
+	screenLines(2, 5, .08);
+	screenLines(9, 23, .05);*/
+
 	for (var h = 0; h < sceneHeight; h = h + 5)
 		rect(0, h, sceneWidth, 2, color(full, full, full, .08));
 	
@@ -244,15 +261,13 @@
 	
 	
 	// ScreenCorners
-	var max = 300;
-	for (var i = 0; i <= max; i++) {
-		c.fillStyle = color(0, 0, 0, (1-i/max)*0.4);
+	r(300, (i)=> {
+		fillStyleAlias(color(0, 0, 0, (1-i/300)*0.4));
 		rect(i, 0, 1, sceneHeight);
 		rect(sceneWidth - i, 0, 1, sceneHeight);
 		rect(0, i, sceneWidth, 1);
 		rect(0, sceneHeight - i, sceneWidth, 1);
-	}
-	
+	});
 
 
 
