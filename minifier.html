@@ -4,7 +4,7 @@
 		<textarea id="source" autocomplete="off">
 <canvas id="a"></canvas>
 <script>
-	var sceneWidth = a.width = 1280, sceneHeight = a.height = 720, c = a.getContext('2d'), full = 255;
+	var sceneWidth = a.width = 1280, sceneHeight = a.height = 720, c = a.getContext('2d'), beginPathAlias = () => c.beginPath(), strokeAlias = () => c.stroke(), closePathAlias = () => c.closePath(), full = 255;
 
 	rnd = (param1, param2) => param2 ? param1 + Math.random() * (param2 - param1) : Math.random() * param1;
 	
@@ -19,11 +19,11 @@
 
 	drawLine = (x, y, a, b, style) => {
 		if (style) c.strokeStyle = style;
-		c.beginPath();
+		beginPathAlias();
 		c.moveTo(x, y);
 		c.lineTo(a, b);
-		c.stroke();
-		c.closePath();
+		strokeAlias();
+		closePathAlias();
 	};
 
 	// Darkness
@@ -45,9 +45,10 @@
 	// Sun
 	r(10, (i) => {
 		c.fillStyle = color(300, 100, 0, 0 + i * 0.1);
-		c.beginPath();
+		beginPathAlias();
 		c.arc(sceneWidth / 2, sceneHeight / 2, 120 - i * 2, 0, Math.PI, true);
 		c.fill();
+		closePathAlias();
 	});
 
 
@@ -92,15 +93,15 @@
 		dots = addDots(dots, 7);
 
 		c.strokeStyle = c.fillStyle = style;
-		c.beginPath();
+		beginPathAlias();
 		for (var i = 0; i < dots.length; i++) {
 			var dot = dots[i];
 			c.lineTo(dot[0], dot[1]);
 		}
 		
 		c.lineTo(dots[0][0], dots[0][1]);
-		c.stroke();
-		c.closePath();
+		strokeAlias();
+		closePathAlias();
 		c.fill();
 	};
 	
