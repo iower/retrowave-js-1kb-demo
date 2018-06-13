@@ -1,8 +1,8 @@
 <canvas id="a"></canvas>
 <script>
-	var sceneWidth = a.width = 1280, sceneHeight = a.height = 720, c = a.getContext('2d'), beginPathAlias = () => c.beginPath(), strokeAlias = () => c.stroke(), closePathAlias = () => c.closePath(), full = 255;
+	var sceneWidth = a.width = 1280, sceneHeight = a.height = 720, c = a.getContext('2d'), beginPathAlias = () => c.beginPath(), strokeAlias = () => c.stroke(), closePathAlias = () => c.closePath(), full = 255, m = Math;
 
-	rnd = (param1, param2) => param2 ? param1 + Math.random() * (param2 - param1) : Math.random() * param1;
+	rnd = (param1, param2) => param2 ? param1 + m.random() * (param2 - param1) : m.random() * param1;
 	
 	color = (r, g, b, a=1) => 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
 
@@ -42,7 +42,7 @@
 	r(10, (i) => {
 		c.fillStyle = color(300, 100, 0, 0 + i * 0.1);
 		beginPathAlias();
-		c.arc(sceneWidth / 2, sceneHeight / 2, 120 - i * 2, 0, Math.PI, true);
+		c.arc(sceneWidth / 2, sceneHeight / 2, 120 - i * 2, 0, m.PI, 1);
 		c.fill();
 		closePathAlias();
 	});
@@ -55,7 +55,7 @@
 	r(20, (i) => drawLine(sceneWidth/2, sceneHeight/2, sceneWidth - sceneWidth / 19 * i, sceneHeight, color(100, 100, full)));
 
 	r(22, (i) => {
-		var y = sceneHeight/2 + 1 * Math.pow(1.3, i);
+		var y = sceneHeight/2 + 1 * m.pow(1.3, i);
 		drawLine(0, y, sceneWidth, y);
 	});
 	
@@ -63,8 +63,8 @@
 
 	// City
 	size = 20;
-	numberOfBuildings = Math.floor(sceneWidth / size);
-	tolerance = Math.floor(size * .3);
+	numberOfBuildings = m.floor(sceneWidth / size);
+	tolerance = m.floor(size * .3);
 	r(numberOfBuildings, (i) => rect(i * size, sceneHeight/2, rnd(size-tolerance, size+tolerance), -rnd(size-tolerance, size+tolerance), color(30, 0, 50)) );
 
 	
@@ -114,10 +114,10 @@
 		
 		var steps = 20;
 		var nonlinearity = rnd(1.15, 1.25);
-		var right = Math.round(rnd(1));
+		var right = m.round(rnd(1));
 		for (var i = 0; i < steps; i++) {
 			var size = (20 - (i*10/steps)) * scale;
-			var palmDotX = right ? (palmX - Math.pow(nonlinearity, i) * scale) - size/2 : (palmX + Math.pow(nonlinearity, i) * scale) - size/2;
+			var palmDotX = right ? (palmX - m.pow(nonlinearity, i) * scale) - size/2 : (palmX + m.pow(nonlinearity, i) * scale) - size/2;
 			var palmDotY = palmY - (20 * i) * scale - size/2;
 			rect(palmDotX, palmDotY, size, size, style);
 			
@@ -136,7 +136,7 @@
 		
 		for (var j = 0; j < branchSteps; j++) {
 			var branchDotX = left ? branchStartX - j * branchSize : branchStartX + j * branchSize;
-			var branchDotY = branchStartY + Math.pow(1.07, j);
+			var branchDotY = branchStartY + m.pow(1.07, j);
 			rect(branchDotX, branchDotY, branchSize, branchSize, style);
 
 			if (j % 3 == 0) {
@@ -149,7 +149,7 @@
 		var leafSteps = rnd(15, 20) * (branchSteps - branchStep)/branchSteps; // ?
 		var leafDotSize = 2;
 		for (var k = 0; k < leafSteps; k++) {
-			var leafDotX = left ? leafStartX + Math.pow(1.05, k) : leafStartX - Math.pow(0.8, k);
+			var leafDotX = left ? leafStartX + m.pow(1.05, k) : leafStartX - m.pow(0.8, k);
 			var leafDotY = leafStartY + k * leafDotSize;
 			rect(leafDotX, leafDotY, leafDotSize, leafDotSize, style);
 		}
@@ -179,7 +179,7 @@
 		for (var i = 0; i < steps; i++) {
 			var size = 20 - (i*10/steps);
 			size *= scale;
-			var x = right ? (palmX - Math.pow(nonlinearity, i)) * scale : (palmX + Math.pow(nonlinearity, i)) * scale;
+			var x = right ? (palmX - m.pow(nonlinearity, i)) * scale : (palmX + m.pow(nonlinearity, i)) * scale;
 			var y = palmY - 20 * i;
 			y *= scale;
 			rect(x, y, size, size, style);
@@ -190,14 +190,14 @@
 					
 					var branch = (left) => {
 						var xx = left ? x - j * size2 : x + j * size2;
-						var yy = y + Math.pow(1.07, j);
+						var yy = y + m.pow(1.07, j);
 						rect(xx, yy, size2, size2, style);
 
 						if (j % 3 == 0) {
 							var steps3 = rnd(15, 20) * (steps2 - j)/steps2;
 							var size3 = 2;
 							for (var k = 0; k < steps3; k++) {
-								var xxx = left ? xx + Math.pow(1.05, k) : xx - Math.pow(1.05, k);
+								var xxx = left ? xx + m.pow(1.05, k) : xx - m.pow(1.05, k);
 								var yyy = yy + k * size3;
 								rect(xxx, yyy, size3, size3, style);
 							}
@@ -230,7 +230,7 @@
 			rect(0, i, sceneWidth, 1);
 			j = j == period-1 ? 0 : j + 1;
 		}
-		period = Math.floor(period/2);
+		period = m.floor(period/2);
 	}
 	
 	
