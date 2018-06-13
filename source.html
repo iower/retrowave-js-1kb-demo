@@ -97,23 +97,19 @@
 		};
 		
 		dots = addDots(dots, 7);
-
+		style = color(25, 0, 25);
 		fillStyleAlias(style);
 		c.strokeStyle = style;
 		beginPathAlias();
-		for (var i = 0; i < dots.length; i++) {
-			var dot = dots[i];
-			lineToAlias(dot[0], dot[1]);
-		}
+		r(dots.length, (i) => lineToAlias(dots[i][0], dots[i][1]));
 		lineToAlias(dots[0][0], dots[0][1]);
 		strokeAlias();
 		closePathAlias();
 		c.fill();
 	};
 	
-	style = color(25, 0, 25);
-	mountain(sceneWidth*3/5, sceneHeight/2, sceneWidth*4/5, sceneHeight/2-100, sceneWidth*6/5, sceneHeight/2, style);
-	mountain(sceneWidth*-1/5, sceneHeight/2, sceneWidth*1/5, sceneHeight/2-100, sceneWidth*2/5, sceneHeight/2, style);
+	mountain(sceneWidth*3/5, sceneHeight/2, sceneWidth*4/5, sceneHeight/2-100, sceneWidth*6/5, sceneHeight/2);
+	mountain(sceneWidth*-1/5, sceneHeight/2, sceneWidth*1/5, sceneHeight/2-100, sceneWidth*2/5, sceneHeight/2);
 
 
 	// Palm
