@@ -244,21 +244,19 @@
 		period = mfloor(period/2);
 	}
 	
-	
+	/*
 	// Screenlines
-	/*screenLines = (width, gap, opacity) => {
+	screenLines = (width, gap, opacity) => {
 		for (var h = 0; h < sceneHeight; h = h + gap)
 			rect(0, h, sceneWidth, width, color(full, full, full, .08));
 	};
 	screenLines(2, 5, .08);
-	screenLines(9, 23, .05);*/
+	screenLines(9, 23, .05);
+	*/
 
-	for (var h = 0; h < sceneHeight; h = h + 5)
-		rect(0, h, sceneWidth, 2, color(full, full, full, .08));
-	
-	for (var h = 0; h < sceneHeight; h = h + 23)
-		rect(0, h, sceneWidth, 9, color(full, full, full, .05));
+	r(sceneHeight/5, (i) => rect(0, i*5, sceneWidth, 2, color(full, full, full, .08)));
 
+	r(sceneHeight/23, (i) => rect(0, i*23, sceneWidth, 9, color(full, full, full, .05)));
 	
 	
 	// ScreenCorners
