@@ -233,7 +233,8 @@
 	// Grid
 	
 	period = 128;
-	for (var k = 1; k <= 4; k++) {
+	
+	r(4, () => {
 		var j = 0;
 		for (var i = 0; i <= sceneWidth; i++) {
 			fillStyleAlias(color(full, full, full, (j/period)*.014));
@@ -242,7 +243,7 @@
 			j = j == period-1 ? 0 : j + 1;
 		}
 		period = mfloor(period/2);
-	}
+	});
 	
 	/*
 	// Screenlines
@@ -294,7 +295,8 @@
 					Gems
 				Sound
 			Code
-				rgb to rgba
+				remove vars
+				sceneHeight/2 -> sceneSemiHeight
 		Minifier
 			tokenizer
 	*/
