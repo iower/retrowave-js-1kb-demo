@@ -1,19 +1,22 @@
 <canvas id="a"></canvas>
 <script>
-	var sceneWidth = a.width = 1280,
-		sceneHeight = a.height = 720,
-		c = a.getContext('2d'),
-		beginPathAlias = () => c.beginPath(),
-		strokeAlias = () => c.stroke(),
-		closePathAlias = () => c.closePath(),
-		lineToAlias = (x, y) => c.lineTo(x, y), // may be removed in future, two extra bytes
-		fillStyleAlias = (s) => c.fillStyle = s,
-		full = 255,
-		hundreed = 100,
-		m = Math,
-		mfloor = m.floor;
+	sceneWidth = a.width = 1280;
+	sceneHeight = a.height = 720;
+	sceneSemiWidth = sceneWidth / 2;
+	sceneSemiHeight = sceneHeight / 2;
+	c = a.getContext('2d');
+	beginPathAlias = () => c.beginPath();
+	strokeAlias = () => c.stroke();
+	closePathAlias = () => c.closePath();
+	lineToAlias = (x, y) => c.lineTo(x, y); // may be removed in future, two extra bytes
+	fillStyleAlias = (s) => c.fillStyle = s;
+	full = 255;
+	hundreed = 100;
+	m = Math;
+	mrandom = m.random;
+	mfloor = m.floor;
 
-	rnd = (param1, param2) => param2 ? param1 + m.random() * (param2 - param1) : m.random() * param1;
+	rnd = (param1, param2) => param2 ? param1 + mrandom() * (param2 - param1) : mrandom() * param1;
 	
 	color = (r, g, b, a=1) => 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
 
@@ -38,14 +41,14 @@
 	
 	// Stars
 	r(3e3, () => {
-		var size = rnd(2);
+		size = rnd(2);
 		rect(rnd(sceneWidth), rnd(sceneHeight), size, size, color(full - rnd(hundreed), full - rnd(hundreed), full - rnd(hundreed), rnd(1)));
 	});
 	
 
 	// Sky gradient
-	var steps = 15;
-	r(steps, (i) => rect(0, sceneHeight/2 - 15 * i, sceneWidth, steps, color(140, 60, 133, 1-i/steps)) );
+	steps = 15;
+	r(steps, (i) => rect(0, sceneSemiHeight - 15 * i, sceneWidth, steps, color(140, 60, 133, 1-i/steps)) );
 
 
 
@@ -53,20 +56,20 @@
 	r(10, (i) => {
 		fillStyleAlias(color(full, hundreed, 0, 0 + i * 0.1));
 		beginPathAlias();
-		c.arc(sceneWidth / 2, sceneHeight / 2, 120 - i * 2, 0, m.PI, 1);
+		c.arc(sceneSemiWidth, sceneSemiHeight, 120 - i * 2, 0, 3, 1);
 		c.fill();
 		closePathAlias();
 	});
 
 
 	// Earth
-	rect(0, sceneHeight / 2, sceneWidth, sceneHeight / 2, color(50, 0, 80));
+	rect(0, sceneSemiHeight, sceneWidth, sceneSemiHeight, color(50, 0, 80));
 
 	// Grid
-	r(20, (i) => drawLine(sceneWidth/2, sceneHeight/2, sceneWidth - sceneWidth / 19 * i, sceneHeight, color(hundreed, hundreed, full)));
+	r(20, (i) => drawLine(sceneSemiWidth, sceneSemiHeight, sceneWidth - sceneWidth / 19 * i, sceneHeight, color(hundreed, hundreed, full)));
 
 	r(22, (i) => {
-		var y = sceneHeight/2 + 1 * m.pow(1.3, i);
+		y = sceneSemiHeight + 1 * m.pow(1.3, i);
 		drawLine(0, y, sceneWidth, y);
 	});
 	
@@ -76,21 +79,24 @@
 	size = 20;
 	numberOfBuildings = mfloor(sceneWidth / size);
 	tolerance = mfloor(size * .3);
-	r(numberOfBuildings, (i) => rect(i * size, sceneHeight/2, rnd(size-tolerance, size+tolerance), -rnd(size-tolerance, size+tolerance), color(30, 0, 50)) );
+	r(numberOfBuildings, (i) => rect(i * size, sceneSemiHeight, rnd(size-tolerance, size+tolerance), -rnd(size-tolerance, size+tolerance), color(30, 0, 50)) );
 
 	
 	// Mountains
-	var mountain = (x1, y1, x2, y2, x3, y3, style) => {
+	mountain = (x1, y1, x2, y2, x3, y3, style) => {
 
-		var dots = [[x1, y1], [x2, y2], [x3, y3]];
+		dots = [[x1, y1], [x2, y2], [x3, y3]];
 
-		var addDots = (dots, depth) => {
-			var edgeness = 5;
+		addDots = (dots, depth) => {
 			
-			for (var i = dots.length - 1; i >= 1; i--) {
-				var x1 = dots[i-1][0], y1 = dots[i-1][1], x2 = dots[i][0], y2 = dots[i][1];
-				var newDotX = (x2 + x1) / 2 + rnd(-(x2 - x1)/edgeness, (x2 - x1)/edgeness);
-				var newDotY = (y2 + y1) / 2 + rnd(-(y2 - y1)/edgeness, (y2 - y1)/edgeness);
+			for (i = dots.length - 1; i >= 1; i--) {
+				x1 = dots[i-1][0];
+				y1 = dots[i-1][1];
+				x2 = dots[i][0];
+				y2 = dots[i][1];
+				// 5 - edgeness
+				newDotX = (x2 + x1) / 2 + rnd(-(x2 - x1)/5, (x2 - x1)/5);
+				newDotY = (y2 + y1) / 2 + rnd(-(y2 - y1)/5, (y2 - y1)/5);
 				dots.splice(i, 0, [newDotX, newDotY]);
 			}
 			
@@ -109,8 +115,8 @@
 		c.fill();
 	};
 	
-	mountain(sceneWidth*3/5, sceneHeight/2, sceneWidth*4/5, sceneHeight/2-hundreed, sceneWidth*6/5, sceneHeight/2);
-	mountain(sceneWidth*-1/5, sceneHeight/2, sceneWidth*1/5, sceneHeight/2-hundreed, sceneWidth*2/5, sceneHeight/2);
+	mountain(sceneWidth*3/5, sceneSemiHeight, sceneWidth*4/5, sceneSemiHeight-hundreed, sceneWidth*6/5, sceneSemiHeight);
+	mountain(sceneWidth*-1/5, sceneSemiHeight, sceneWidth*1/5, sceneSemiHeight-hundreed, sceneWidth*2/5, sceneSemiHeight);
 
 
 	// Palm
@@ -164,8 +170,8 @@
 
 	var steps = 10;
 	for (var i = 0; i < steps; i++) {
-		xLeft = sceneWidth/2 * i / steps;
-		xRight = sceneWidth - sceneWidth/2 * i / steps;
+		xLeft = sceneSemiWidth * i / steps;
+		xRight = sceneWidth - sceneSemiWidth * i / steps;
 		y = sceneHeight - xLeft * sceneHeight/sceneWidth;
 		scale = 1 * 1 - (i / steps);
 		//rect(x, y, 1, 1, color(full,full,full));
@@ -232,7 +238,7 @@
 	
 	r(4, () => {
 		var j = 0;
-		for (var i = 0; i <= sceneWidth; i++) {
+		for (i = 0; i <= sceneWidth; i++) {
 			fillStyleAlias(color(full, full, full, (j/period)*.014));
 			rect(i, 0, 1, sceneHeight);
 			rect(0, i, sceneWidth, 1);
@@ -291,9 +297,12 @@
 					Gems
 				Sound
 			Code
-				remove vars
-				sceneHeight/2 -> sceneSemiHeight
-				math.PI ~= 4
+				replace
+					strokestyle
+					length
+				rewrite dots
+					without variables
+					r()
 		Minifier
 			+ tokenizer
 	*/
