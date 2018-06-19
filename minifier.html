@@ -24,7 +24,7 @@
 	
 	color = (r, g, b, a=1) => 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
 
-	r = (n, f) => { for (j = 0; n > j; f(j++)); };
+	r = (repeats, f) => { for (j = 0; repeats > j; f(i=j++, n=repeats)); };
 
 	rect = (x, y, w, h, style) => {
 		if (style) fillStyleAlias(style);
@@ -51,14 +51,13 @@
 	
 
 	// Sky gradient
-	steps = 15;
-	r(steps, (i) => rect(0, sceneSemiHeight - 15 * i, sceneWidth, steps, color(140, 60, 133, 1-i/steps)) );
+	r(15, () => rect(0, sceneSemiHeight - n * i, sceneWidth, n, color(140, 60, 133, 1-i/n)) );
 
 
 
 	// Sun
-	r(10, (i) => {
-		fillStyleAlias(color(full, hundreed, 0, 0 + i * 0.1));
+	r(10, () => {
+		fillStyleAlias(color(full, hundreed, 0, i / n));
 		beginPathAlias();
 		c.arc(sceneSemiWidth, sceneSemiHeight, 120 - i * 2, 0, 3, 1);
 		c.fill();
@@ -70,9 +69,9 @@
 	rect(0, sceneSemiHeight, sceneWidth, sceneSemiHeight, color(50, 0, 80));
 
 	// Grid
-	r(20, (i) => drawLine(sceneSemiWidth, sceneSemiHeight, sceneWidth - sceneWidth / 19 * i, sceneHeight, color(hundreed, hundreed, full)));
+	r(20, () => drawLine(sceneSemiWidth, sceneSemiHeight, sceneWidth - sceneWidth / 19 * i, sceneHeight, color(hundreed, hundreed, full)));
 
-	r(22, (i) => {
+	r(22, () => {
 		y = sceneSemiHeight + 1 * m.pow(1.3, i);
 		drawLine(0, y, sceneWidth, y);
 	});
@@ -83,11 +82,11 @@
 	size = 20;
 	numberOfBuildings = mfloor(sceneWidth / size);
 	tolerance = mfloor(size * .3);
-	r(numberOfBuildings, (i) => rect(i * size, sceneSemiHeight, rnd(size-tolerance, size+tolerance), -rnd(size-tolerance, size+tolerance), color(30, 0, 50)) );
+	r(numberOfBuildings, () => rect(i * size, sceneSemiHeight, rnd(size-tolerance, size+tolerance), -rnd(size-tolerance, size+tolerance), color(30, 0, 50)) );
 
 	
 	// Mountains
-	mountain = (x1, y1, x2, y2, x3, y3, style) => {
+	mountain = (x1, y1, x2, y2, x3, y3) => {
 
 		dots = [[x1, y1], [x2, y2], [x3, y3]];
 
@@ -112,7 +111,7 @@
 		fillStyleAlias(style);
 		c.strokeStyle = style;
 		beginPathAlias();
-		r(dots.length, (i) => lineToAlias(dots[i][0], dots[i][1]));
+		r(dots.length, () => lineToAlias(dots[i][0], dots[i][1]));
 		lineToAlias(dots[0][0], dots[0][1]);
 		strokeAlias();
 		closePathAlias();
@@ -251,24 +250,21 @@
 		period = mfloor(period/2);
 	});
 	
-	/*
+	
 	// Screenlines
-	screenLines = (width, gap, opacity) => {
-		for (var h = 0; h < sceneHeight; h = h + gap)
-			rect(0, h, sceneWidth, width, color(full, full, full, .08));
-	};
-	screenLines(2, 5, .08);
-	screenLines(9, 23, .05);
+	/*
+	screenLines = (period, gap, opacity)=>r(sceneHeight/period, () => rect(0, i*period, sceneWidth, gap, color(full, full, full, opacity)));
+	screenLines(5, 2, .08);
+	screenLines(23, 9, .05);
 	*/
 
-	r(sceneHeight/5, (i) => rect(0, i*5, sceneWidth, 2, color(full, full, full, .08)));
-
-	r(sceneHeight/23, (i) => rect(0, i*23, sceneWidth, 9, color(full, full, full, .05)));
+	r(sceneHeight/5, () => rect(0, i*5, sceneWidth, 2, color(full, full, full, .08)));
+	r(sceneHeight/23, () => rect(0, i*23, sceneWidth, 9, color(full, full, full, .05)));
 	
 	
 	// ScreenCorners
-	r(300, (i)=> {
-		fillStyleAlias(color(0, 0, 0, (1-i/300)*0.4));
+	r(300, ()=> {
+		fillStyleAlias(color(0, 0, 0, (1-i/n)*0.4));
 		rect(i, 0, 1, sceneHeight);
 		rect(sceneWidth - i, 0, 1, sceneHeight);
 		rect(0, i, sceneWidth, 1);
@@ -307,7 +303,8 @@
 				rewrite dots
 					without variables
 					r()
-				remove closing canvas tag
+				screenlines
+					two calls to function (requires to minifier rewriting)
 		Minifier
 			+ tokenizer
 	*/
