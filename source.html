@@ -76,9 +76,8 @@
 
 	// City
 	size = 20;
-	numberOfBuildings = mfloor(sceneWidth / size);
 	tolerance = mfloor(size * .3);
-	r(numberOfBuildings, () => rect(i * size, sceneSemiHeight, rnd(size-tolerance, size+tolerance), -rnd(size-tolerance, size+tolerance), color(30, 0, 50)) );
+	r(mfloor(sceneWidth / size), () => rect(i * size, sceneSemiHeight, rnd(size-tolerance, size+tolerance), -rnd(size-tolerance, size+tolerance), color(30, 0, 50)) );
 
 	
 	// Mountains
@@ -88,6 +87,23 @@
 
 		addDots = (dots, depth) => {
 			
+			r(dots.length - 1, () => {
+				
+				currentItem = n - i;
+				
+				x1 = dots[currentItem-1][0];
+				y1 = dots[currentItem-1][1];
+				x2 = dots[currentItem][0];
+				y2 = dots[currentItem][1];
+
+				dots.splice(currentItem, 0, [
+					(x2 + x1) / 2 + rnd(-(x2 - x1)/5, (x2 - x1)/5),
+					(y2 + y1) / 2 + rnd(-(y2 - y1)/5, (y2 - y1)/5)
+				]);
+				
+			});
+
+			/*
 			for (i = dots.length - 1; i >= 1; i--) {
 				x1 = dots[i-1][0];
 				y1 = dots[i-1][1];
@@ -98,7 +114,8 @@
 				newDotY = (y2 + y1) / 2 + rnd(-(y2 - y1)/5, (y2 - y1)/5);
 				dots.splice(i, 0, [newDotX, newDotY]);
 			}
-			
+			*/
+
 			return --depth ? addDots(dots, depth) : dots;
 		};
 		
@@ -259,7 +276,7 @@
 	
 	
 	// ScreenCorners
-	r(300, ()=> {
+	r(300, () => {
 		fillStyleAlias(color(0, 0, 0, (1-i/n)*0.4));
 		rect(i, 0, 1, sceneHeight);
 		rect(sceneWidth - i, 0, 1, sceneHeight);
@@ -299,8 +316,10 @@
 				rewrite dots
 					without variables
 					r()
+					{for... return} to r(),...
 				screenlines
 					two calls to function (requires to minifier rewriting)
+				()=>{...} to ()=>...
 		Minifier
 			+ tokenizer
 	*/
