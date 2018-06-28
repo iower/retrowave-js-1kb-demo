@@ -24,7 +24,7 @@
 	
 	color = (r, g, b, a=1) => 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
 
-	r = (repeats, f) => { for (j = 0; repeats > j; f(i=j++, n=repeats)); };
+	r = (repeats, f) => { for (var j = 0; repeats > j; f(i=j++, n=repeats)); };
 
 	rect = (x, y, w, h, style) => {
 		if (style) fillStyleAlias(style);
@@ -125,8 +125,13 @@
 		style = color(25, 0, 25);
 		fillStyleAlias(style);
 		c.strokeStyle = style;
+
 		beginPathAlias();
-		r(dots.length, () => lineToAlias(dots[i][0], dots[i][1]));
+
+		r(dots.length, () => 
+			lineToAlias(dots[i][0], dots[i][1])
+		);
+
 		lineToAlias(dots[0][0], dots[0][1]);
 		strokeAlias();
 		closePathAlias();
@@ -256,13 +261,13 @@
 	
 	r(4, () => {
 		var j = 0;
-		for (i = 0; i <= sceneWidth; i++) {
+		r(sceneWidth, () => {
 			fillStyleAlias(color(full, full, full, (j/period)*.014));
 			rect(i, 0, 1, sceneHeight);
 			rect(0, i, sceneWidth, 1);
 			j = j == period-1 ? 0 : j + 1;
-		}
-		period = mfloor(period/2);
+		});
+		period /= 2;
 	});
 	
 	
@@ -315,10 +320,6 @@
 				replace
 					strokestyle
 					length
-				rewrite dots
-					without variables
-					r()
-					{for... return} to r(),...
 				screenlines
 					two calls to function (requires to minifier rewriting)
 				()=>{...} to ()=>...
