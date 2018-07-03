@@ -268,14 +268,11 @@
 	
 	
 	// Screenlines
-	/*
-	screenLines = (period, gap, opacity)=>r(sceneHeight/period, () => rect(0, i*period, sceneWidth, gap, color(full, full, full, opacity)));
+	
+	screenLines = (period, gap, opacity) => r(sceneHeight/period, () => rect(0, i * period, sceneWidth, gap, color(full, full, full, opacity)));
+
 	screenLines(5, 2, .08);
 	screenLines(23, 9, .05);
-	*/
-
-	r(sceneHeight/5, () => rect(0, i*5, sceneWidth, 2, color(full, full, full, .08)));
-	r(sceneHeight/23, () => rect(0, i*23, sceneWidth, 9, color(full, full, full, .05)));
 	
 	
 	// ScreenCorners
@@ -316,8 +313,6 @@
 				replace
 					strokestyle
 					length
-				screenlines
-					two calls to function (requires to minifier rewriting)
 				()=>{...} to ()=>...
 		Minifier
 			+ tokenizer
