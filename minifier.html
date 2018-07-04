@@ -138,8 +138,8 @@
 		c.fill();
 	};
 	
-	mountain(sceneWidth*3/5, sceneSemiHeight, sceneWidth*4/5, sceneSemiHeight-hundreed, sceneWidth*6/5, sceneSemiHeight);
-	mountain(sceneWidth*-1/5, sceneSemiHeight, sceneWidth*1/5, sceneSemiHeight-hundreed, sceneWidth*2/5, sceneSemiHeight);
+	mountain(sceneWidth * .6, sceneSemiHeight, sceneWidth * .8, sceneSemiHeight - hundreed, sceneWidth * 1.2, sceneSemiHeight);
+	mountain(sceneWidth * -.2, sceneSemiHeight, sceneWidth * .2, sceneSemiHeight - hundreed, sceneWidth * .4, sceneSemiHeight);
 
 
 	// Palm
@@ -185,7 +185,7 @@
 		var leafSteps = rnd(15, 20) * (branchSteps - branchStep)/branchSteps; // ?
 		var leafDotSize = 2;
 		for (var k = 0; k < leafSteps; k++) {
-			var leafDotX = left ? leafStartX + m.pow(1.05, k) : leafStartX - m.pow(0.8, k);
+			var leafDotX = left ? leafStartX + m.pow(1.05, k) : leafStartX - m.pow(.8, k);
 			var leafDotY = leafStartY + k * leafDotSize;
 			rect(leafDotX, leafDotY, leafDotSize, leafDotSize, style);
 		}
@@ -252,7 +252,7 @@
 
 	palm(150, 600);
 	palm(1000, 550, 1);
-	palm(1200, 550, 1, 0.5);
+	palm(1200, 550, 1, .5);
 	*/
 
 	// Grid
@@ -281,7 +281,7 @@
 	
 	// ScreenCorners
 	r(300, () => {
-		fillStyleAlias(color(0, 0, 0, (1-i/n)*0.4));
+		fillStyleAlias(color(0, 0, 0, (1-i/n)*.4));
 		rect(i, 0, 1, sceneHeight);
 		rect(sceneWidth - i, 0, 1, sceneHeight);
 		rect(0, i, sceneWidth, 1);
