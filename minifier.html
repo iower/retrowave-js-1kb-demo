@@ -27,12 +27,12 @@
 	r = (repeats, f) => { for (var j = 0; repeats > j; f(i=j++, n=repeats)); };
 
 	rect = (x, y, w, h, style) => {
-		if (style) fillStyleAlias(style);
+		style ? fillStyleAlias(style) : 0;
 		c.fillRect(x, y, w, h);
 	};
 
 	drawLine = (x, y, a, b, style) => {
-		if (style) c.strokeStyle = style;
+		style ? c.strokeStyle = style : 0;
 		beginPathAlias();
 		c.moveTo(x, y);
 		lineToAlias(a, b);
