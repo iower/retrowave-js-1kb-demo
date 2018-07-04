@@ -68,7 +68,7 @@
 	r(20, () => drawLine(sceneSemiWidth, sceneSemiHeight, sceneWidth - sceneWidth / 19 * i, sceneHeight, color(hundreed, hundreed, full)));
 
 	r(22, () => {
-		y = sceneSemiHeight + 1 * m.pow(1.3, i);
+		y = sceneSemiHeight + m.pow(1.3, i);
 		drawLine(0, y, sceneWidth, y);
 	});
 	
@@ -76,8 +76,8 @@
 
 	// City
 	size = 20;
-	tolerance = 6;
-	r(mfloor(sceneWidth / size), () => rect(i * size, sceneSemiHeight, rnd(size-tolerance, size+tolerance), -rnd(size-tolerance, size+tolerance), color(30, 0, 50)) );
+	// 6 - size tolerance
+	r(mfloor(sceneWidth / size), () => rect(i * size, sceneSemiHeight, rnd(14, 26), -rnd(14, 26), color(30, 0, 50)));
 
 	
 	// Mountains
