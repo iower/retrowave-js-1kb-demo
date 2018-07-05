@@ -10,6 +10,7 @@
 	closePathAlias = () => c.closePath();
 	lineToAlias = (x, y) => c.lineTo(x, y); // may be removed in future, two extra bytes
 	fillStyleAlias = (s) => c.fillStyle = s;
+	strokeStyleString = 'strokeStyle';
 	full = 255;
 	hundreed = 100;
 	m = Math;
@@ -28,7 +29,7 @@
 	};
 
 	drawLine = (x, y, a, b, style) => {
-		style ? c.strokeStyle = style : 0;
+		style ? c[strokeStyleString] = style : 0;
 		beginPathAlias();
 		c.moveTo(x, y);
 		lineToAlias(a, b);
@@ -120,7 +121,7 @@
 		
 		style = color(25, 0, 25);
 		fillStyleAlias(style);
-		c.strokeStyle = style;
+		c[strokeStyleString] = style;
 
 		beginPathAlias();
 
