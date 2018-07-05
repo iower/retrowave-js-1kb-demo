@@ -1,4 +1,4 @@
-<canvas id="a">
+<canvas id=a>
 <script>
 	sceneWidth = a.width = 1280;
 	sceneHeight = a.height = 720;
@@ -15,7 +15,6 @@
 	hundreed = 100;
 	m = Math;
 	mrandom = m.random;
-	mfloor = m.floor;
 
 	rnd = (param1, param2) => param2 ? param1 + mrandom() * (param2 - param1) : mrandom() * param1;
 	
@@ -78,7 +77,7 @@
 	// City
 	size = 20;
 	// 6 - size tolerance
-	r(mfloor(sceneWidth / size), () => rect(i * size, sceneSemiHeight, rnd(14, 26), -rnd(14, 26), color(30, 0, 50)));
+	r(sceneWidth / size, () => rect(i * size, sceneSemiHeight, rnd(14, 26), -rnd(14, 26), color(30, 0, 50)));
 
 	
 	// Mountains
