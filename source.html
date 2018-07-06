@@ -16,7 +16,7 @@
 	m = Math;
 	mrandom = m.random;
 
-	rnd = (param1, param2) => param2 ? param1 + mrandom() * (param2 - param1) : mrandom() * param1;
+	rnd = (param1, param2 = 0) => param2 + mrandom() * (param1 - param2);
 	
 	color = (r, g, b, a=1) => 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
 
@@ -134,8 +134,17 @@
 		c.fill();
 	};
 	
-	mountain(sceneWidth * .6, sceneSemiHeight, sceneWidth * .8, sceneSemiHeight - hundreed, sceneWidth * 1.2, sceneSemiHeight);
-	mountain(sceneWidth * -.2, sceneSemiHeight, sceneWidth * .2, sceneSemiHeight - hundreed, sceneWidth * .4, sceneSemiHeight);
+	mountain(
+		sceneWidth * .6, sceneSemiHeight,
+		sceneWidth * .8, sceneSemiHeight - hundreed,
+		sceneWidth * 1.2, sceneSemiHeight
+	);
+
+	mountain(
+		sceneWidth * -.2, sceneSemiHeight,
+		sceneWidth * .2, sceneSemiHeight - hundreed,
+		sceneWidth * .4, sceneSemiHeight
+	);
 
 
 	// Palm
