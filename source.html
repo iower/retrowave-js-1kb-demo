@@ -41,12 +41,14 @@
 	// Stars
 	r(3e3, () => {
 		size = rnd(2);
-		rect(rnd(sceneWidth), rnd(sceneHeight), size, size, color(full - rnd(hundreed), full - rnd(hundreed), full - rnd(hundreed), rnd(1)));
+		rect(rnd(sceneWidth), rnd(sceneHeight), size, size, color(rnd(hundreed, full), rnd(hundreed, full), rnd(hundreed, full), rnd(1)));
 	});
 	
 
 	// Sky gradient
-	r(15, () => rect(0, sceneSemiHeight - n * i, sceneWidth, n, color(140, 60, 133, 1-i/n)) );
+	r(15, () => 
+		rect(0, sceneSemiHeight - n * i, sceneWidth, n, color(140, 60, 133, 1-i/n))
+	);
 
 
 
@@ -74,15 +76,15 @@
 
 
 	// City
-	size = 20;
-	// 6 - size tolerance
-	r(sceneWidth / size, () => rect(i * size, sceneSemiHeight, rnd(14, 26), -rnd(14, 26), color(30, 0, 50)));
+
+	// 20 - average building size
+	r(sceneWidth / 20, () => rect(i * 20, sceneSemiHeight, rnd(14, 26), -rnd(14, 26), color(30, 0, 50)));
 
 	
 	// Mountains
-	mountain = (x1, y1, x2, y2, x3, y3) => {
+	mountain = (x1, x2, x3) => {
 
-		dots = [[x1, y1], [x2, y2], [x3, y3]];
+		dots = [[x1, sceneSemiHeight], [x2, sceneSemiHeight - hundreed], [x3, sceneSemiHeight]];
 
 		r(9, () =>
 			
@@ -96,6 +98,7 @@
 				y2 = dots[currentItem][1];
 
 				dots.splice(currentItem, 0, [
+					// 5 - mountain edgeness
 					(x2 + x1) / 2 + rnd(-(x2 - x1)/5, (x2 - x1)/5),
 					(y2 + y1) / 2 + rnd(-(y2 - y1)/5, (y2 - y1)/5)
 				]);
@@ -104,9 +107,7 @@
 			
 		);
 		
-		style = color(25, 0, 25);
-		fillStyleAlias(style);
-		c[strokeStyleString] = style;
+		fillStyleAlias(c[strokeStyleString] = color(25, 0, 25));
 
 		beginPathAlias();
 
@@ -120,17 +121,8 @@
 		c.fill();
 	};
 	
-	mountain(
-		sceneWidth * .6, sceneSemiHeight,
-		sceneWidth * .8, sceneSemiHeight - hundreed,
-		sceneWidth * 1.2, sceneSemiHeight
-	);
-
-	mountain(
-		sceneWidth * -.2, sceneSemiHeight,
-		sceneWidth * .2, sceneSemiHeight - hundreed,
-		sceneWidth * .4, sceneSemiHeight
-	);
+	mountain(sceneWidth * .6, sceneWidth * .8, sceneWidth * 1.2);
+	mountain(sceneWidth * -.2, sceneWidth * .2, sceneWidth * .4);
 
 
 	// Palm
@@ -271,6 +263,7 @@
 	
 	
 	// ScreenCorners
+
 	r(300, () => {
 		fillStyleAlias(color(0, 0, 0, (1-i/n)*.4));
 		rect(i, 0, 1, sceneHeight);
@@ -305,10 +298,7 @@
 					Gems
 				Sound
 			Code
-				replace
-					strokestyle
-					length
-				()=>{...} to ()=>...
+				...
 		Minifier
 			+ tokenizer
 	*/
