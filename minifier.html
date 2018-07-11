@@ -86,9 +86,9 @@
 
 	
 	// Mountains
-	mountain = (x1, x2, x3) => {
+	mountain = (x1, x3) => {
 
-		dots = [[x1, sceneSemiHeight], [x2, sceneSemiHeight - hundreed], [x3, sceneSemiHeight]];
+		dots = [[x1, sceneSemiHeight], [(x1 + x3)/2, sceneSemiHeight - hundreed], [x3, sceneSemiHeight]];
 
 		r(9, () =>
 			
@@ -111,22 +111,17 @@
 			
 		);
 		
-		fillStyleAlias(c[strokeStyleString] = color(25, 0, 25));
-
-		beginPathAlias();
+		beginPathAlias(fillStyleAlias(c[strokeStyleString] = color(25, 0, 25)));
 
 		r(dots.length, () => 
 			lineToAlias(dots[i][0], dots[i][1])
 		);
 
-		lineToAlias(dots[0][0], dots[0][1]);
-		strokeAlias();
-		closePathAlias();
-		c.fill();
+		c.fill(closePathAlias(strokeAlias(lineToAlias(dots[0][0], dots[0][1]))));
 	};
 	
-	mountain(sceneWidth * .6, sceneWidth * .8, sceneWidth * 1.2);
-	mountain(sceneWidth * -.2, sceneWidth * .2, sceneWidth * .4);
+	mountain(sceneWidth * .6, sceneWidth * 1.2);
+	mountain(sceneWidth * -.2, sceneWidth * .4);
 
 
 	// Palm
@@ -260,7 +255,11 @@
 	
 	// Screenlines
 	
-	screenLines = (period, gap, opacity) => r(sceneHeight/period, () => rect(0, i * period, sceneWidth, gap, color(full, full, full, opacity)));
+	screenLines = (period, gap, opacity) => 
+		r(sceneHeight/period, () => 
+			rect(0, i * period, sceneWidth, gap, color(full, full, full, opacity)
+		)
+	);
 
 	screenLines(5, 2, .08);
 	screenLines(23, 9, .05);
