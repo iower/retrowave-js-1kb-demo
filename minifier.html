@@ -57,13 +57,15 @@
 
 
 	// Sun
-	r(10, () => {
-		fillStyleAlias(color(full, hundreed, 0, i / n));
-		beginPathAlias();
-		c.arc(sceneSemiWidth, sceneSemiHeight, 120 - i * 2, 0, 3, 1);
-		c.fill();
-		closePathAlias();
-	});
+	r(10, () =>
+		closePathAlias(
+		c.fill(
+		c.arc(sceneSemiWidth, sceneSemiHeight, 120 - i * 2, 0, 3, 1,
+		beginPathAlias(
+		fillStyleAlias(
+		color(full, hundreed, 0, i / n)
+		)))))
+	);
 
 
 	// Earth
