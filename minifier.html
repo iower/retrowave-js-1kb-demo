@@ -25,10 +25,8 @@
 
 	r = (repeats, f) => { for (var j = 0; repeats > j; f(i=j++, n=repeats)); };
 
-	rect = (x, y, w, h, style) => {
-		style ? fillStyleAlias(style) : 0;
-		c.fillRect(x, y, w, h);
-	};
+	rect = (x, y, w, h, style) =>
+		c.fillRect(x, y, w, h, style ? fillStyleAlias(style) : 0);
 
 	drawLine = (x, y, a, b, style) => {
 		style ? c[strokeStyleString] = style : 0;
@@ -39,17 +37,21 @@
 		closePathAlias();
 	};
 
+
 	// Darkness
-	rect(0, 0, sceneWidth, sceneHeight, color(0,0,0));
+
+	rect(0, 0, sceneWidth, sceneHeight, color(0, 0, 0));
 	
+
 	// Stars
-	r(3e3, () => {
-		size = rnd(2);
-		rect(rnd(sceneWidth), rnd(sceneHeight), size, size, color(rnd(hundreed, full), rnd(hundreed, full), rnd(hundreed, full), rnd(1)));
-	});
+
+	r(1e3, () =>
+		rect(rnd(sceneWidth), rnd(sceneHeight), 2, 2, color(rnd(hundreed, full), rnd(hundreed, full), rnd(hundreed, full), rnd(1)))
+	);
 	
 
 	// Sky gradient
+
 	r(15, () => 
 		rect(0, sceneSemiHeight - n * i, sceneWidth, n, color(140, 60, 133, 1-i/n))
 	);
@@ -57,6 +59,7 @@
 
 
 	// Sun
+
 	r(10, () =>
 		closePathAlias(
 		c.fill(
@@ -69,7 +72,9 @@
 
 
 	// Earth
+
 	rect(0, sceneSemiHeight, sceneWidth, sceneSemiHeight, color(50, 0, 80));
+
 
 	// Grid
 
@@ -84,7 +89,9 @@
 	// City
 
 	// 20 - average building size
-	r(sceneWidth / 20, () => rect(i * 20, sceneSemiHeight, rnd(14, 26), -rnd(14, 26), color(30, 0, 50)));
+	r(sceneWidth / 20, () =>
+		rect(i * 20, sceneSemiHeight, rnd(14, 26), -rnd(14, 26), color(30, 0, 50))
+	);
 
 	
 	// Mountains
@@ -269,13 +276,14 @@
 	
 	// ScreenCorners
 
-	r(300, () => {
-		fillStyleAlias(color(0, 0, 0, (1-i/n)*.4));
-		rect(i, 0, 1, sceneHeight);
-		rect(sceneWidth - i, 0, 1, sceneHeight);
-		rect(0, i, sceneWidth, 1);
-		rect(0, sceneHeight - i, sceneWidth, 1);
-	});
+	r(300, () =>
+		rect(0, sceneHeight - i, sceneWidth, 1, 
+		fillStyleAlias(color(0, 0, 0, (1-i/n)*.4)),
+		rect(0, i, sceneWidth, 1),
+		rect(sceneWidth - i, 0, 1, sceneHeight),
+		rect(i, 0, 1, sceneHeight),
+		)
+	);
 
 
 
