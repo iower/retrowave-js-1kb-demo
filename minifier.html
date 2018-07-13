@@ -21,7 +21,7 @@
 
 	rnd = (param1, param2 = 0) => param2 + m.random() * (param1 - param2);
 	
-	color = (r, g, b, a=1) => 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+	color = (r, g, b, a=1) => `rgba(${r},${g},${b},${a})`;
 
 	r = (repeats, f) => { for (var j = 0; repeats > j; f(i=j++, n=repeats)); };
 
@@ -435,6 +435,7 @@
 		tokenizedText = tokenizedText.replace(/;/g, '@');
 		tokenizedText = tokenizedText.replaceAll('.', '@');
 		tokenizedText = tokenizedText.replaceAll('\'', '@');
+		tokenizedText = tokenizedText.replaceAll('`', '@');
 		tokenizedText = tokenizedText.replaceAll(' ', '@');
 
 		
