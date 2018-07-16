@@ -7,7 +7,6 @@
 	c = a.getContext('2d');
 	beginPathAlias = () => c.beginPath();
 	strokeAlias = () => c.stroke();
-	closePathAlias = () => c.closePath();
 	lineToAlias = (x, y) => c.lineTo(x, y); // may be removed in future, two extra bytes
 	fillStyleAlias = (s) => c.fillStyle = s;
 	strokeStyleString = 'strokeStyle';
@@ -30,7 +29,6 @@
 		c.moveTo(x, y);
 		lineToAlias(a, b);
 		strokeAlias();
-		closePathAlias();
 	};
 
 
@@ -57,13 +55,13 @@
 	// Sun
 
 	r(10, () =>
-		closePathAlias(
+		
 		c.fill(
 		c.arc(sceneSemiWidth, sceneSemiHeight, 120 - i * 2, 0, 3, 1,
 		beginPathAlias(
 		fillStyleAlias(
 		color(full, hundreed, 0, i / n)
-		)))))
+		))))
 	);
 
 
@@ -122,7 +120,7 @@
 			lineToAlias(dots[i][0], dots[i][1])
 		);
 
-		c.fill(closePathAlias(strokeAlias(lineToAlias(dots[0][0], dots[0][1]))));
+		c.fill(strokeAlias(lineToAlias(dots[0][0], dots[0][1])));
 	};
 	
 	mountain(sceneWidth * .6, sceneWidth * 1.2);
