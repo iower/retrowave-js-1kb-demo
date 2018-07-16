@@ -549,8 +549,21 @@
 			scriptText = scriptText.replaceAll(replacement, replacements[replacement]);
 		}
 
+		/*
 		scriptText = scriptText.replace(/\(\)=>/g, '#');
 		scriptText = 'eval("' + scriptText + '".replace(/#/g,"()=>"))';
+		*/
+		
+		/*
+		scriptText = scriptText.replace(/\(\)=>/g, '#');
+		scriptText = scriptText.replace(/\)\)\)/g, '@');
+		scriptText = 'Z="replace";eval("' + scriptText + '"[Z](/#/g,"()=>")[Z](/@/g,"))"))';
+		*/
+		
+		scriptText = scriptText.replace(/\(\)=>/g, '#');
+		scriptText = scriptText.replace(/\)\)/g, '@');
+		scriptText = 'eval("' + scriptText + '".replace(/#/g,"()=>").replace(/@/g,"))"))';
+		
 
 		return beforeScriptText + scriptText + afterScriptText;
 	}
