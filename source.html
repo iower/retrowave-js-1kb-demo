@@ -43,16 +43,15 @@
 	);
 	
 	
-	// Sky gradient
-	
 	r(15, () => 
-		rect(0, sceneSemiHeight - n * i, sceneWidth, n, color(140, 60, 133, 1-i/n))
-	);
-	
-	
-	// Sun
-	
-	r(10, () =>
+		
+		
+		// Sky gradient
+		
+		rect(0, sceneSemiHeight - n * i, sceneWidth, n, color(140, 60, 133, 1-i/n),
+		
+		
+		// Sun
 		
 		c.fill(
 		c.arc(sceneSemiWidth, sceneSemiHeight, 120 - i * 2, 0, 3, 1,
@@ -60,6 +59,8 @@
 		fillStyleAlias(
 		color(full, hundreed, 0, i / n)
 		))))
+		
+		)
 	);
 	
 	
@@ -118,7 +119,7 @@
 			lineToAlias(dots[i][0], dots[i][1])
 		);
 		
-		c.fill(strokeAlias(lineToAlias(dots[0][0], dots[0][1])));
+		c.fill(lineToAlias(dots[0][0], dots[0][1]));
 	};
 	
 	mountain(sceneWidth * .6, sceneWidth * 1.2);
