@@ -22,13 +22,14 @@
 	rect = (x, y, w, h, style) =>
 		c.fillRect(x, y, w, h, style ? fillStyleAlias(style) : 0);
 	
-	drawLine = (x, y, a, b, style) => {
-		style ? c[strokeStyleString] = style : 0;
-		beginPathAlias();
-		c.moveTo(x, y);
-		lineToAlias(a, b);
-		strokeAlias();
-	};
+	drawLine = (x, y, a, b=y, style) =>
+		strokeAlias(
+		lineToAlias(a, b,
+		c.moveTo(x, y,
+		beginPathAlias(
+		c[strokeStyleString] = style
+		))))
+	;
 	
 	
 	// Darkness
@@ -71,17 +72,24 @@
 	
 	// Grid
 	
-	r(22, () => {
-		y = sceneSemiHeight + m.pow(1.3, i);
-		drawLine(0, y, sceneWidth, y);
-		drawLine(sceneSemiWidth, sceneSemiHeight, sceneWidth - sceneWidth / 21 * i, sceneHeight, color(hundreed, hundreed, full));
-	});
+	r(22, () =>
+		
+		// Horizontal lines
+		drawLine(sceneSemiWidth, sceneSemiHeight, sceneWidth - sceneWidth / 21 * i, sceneHeight, color(hundreed, hundreed, full), 
+		
+		// Road
+		drawLine(0, sceneSemiHeight + m.pow(1.3, i), sceneWidth)
+		
+		)
+		
+	);
 	
 	
 	// City
 	
 	// 20 - average building size
-	r(sceneWidth / 20, () =>
+	// 64 - number of buildings
+	r(64, () =>
 		rect(i * 20, sceneSemiHeight, rnd(14, 26), -rnd(14, 26), color(30, 0, 50))
 	);
 	
