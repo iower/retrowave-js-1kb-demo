@@ -1,28 +1,27 @@
-<canvas id=a>
-<script>
+<body onload="
 	sceneWidth = a.width = 1280;
 	sceneHeight = a.height = 720;
 	sceneSemiWidth = sceneWidth / 2;
 	sceneSemiHeight = sceneHeight / 2;
-	c = a.getContext('2d');
+	c = a.getContext(`2d`);
 	beginPathAlias = () => c.beginPath();
 	strokeAlias = () => c.stroke();
 	lineToAlias = (x, y) => c.lineTo(x, y); // may be removed in future, two extra bytes
 	fillStyleAlias = (s) => c.fillStyle = s;
-	strokeStyleString = 'strokeStyle';
+	strokeStyleString = `strokeStyle`;
 	full = 255;
 	hundreed = 100;
 	m = Math;
-
+	
 	rnd = (param1, param2 = 0) => param2 + m.random() * (param1 - param2);
 	
 	color = (r, g, b, a=1) => `rgba(${r},${g},${b},${a})`;
-
+	
 	r = (repeats, f) => { for (var j = 0; repeats > j; f(i=j++, n=repeats)); };
-
+	
 	rect = (x, y, w, h, style) =>
 		c.fillRect(x, y, w, h, style ? fillStyleAlias(style) : 0);
-
+	
 	drawLine = (x, y, a, b, style) => {
 		style ? c[strokeStyleString] = style : 0;
 		beginPathAlias();
@@ -30,30 +29,29 @@
 		lineToAlias(a, b);
 		strokeAlias();
 	};
-
-
+	
+	
 	// Darkness
-
+	
 	rect(0, 0, sceneWidth, sceneHeight, color(0, 0, 0));
 	
-
+	
 	// Stars
-
+	
 	r(1e3, () =>
 		rect(rnd(sceneWidth), rnd(sceneHeight), 2, 2, color(rnd(hundreed, full), rnd(hundreed, full), rnd(hundreed, full), rnd(1)))
 	);
 	
-
+	
 	// Sky gradient
-
+	
 	r(15, () => 
 		rect(0, sceneSemiHeight - n * i, sceneWidth, n, color(140, 60, 133, 1-i/n))
 	);
-
-
-
+	
+	
 	// Sun
-
+	
 	r(10, () =>
 		
 		c.fill(
@@ -63,36 +61,36 @@
 		color(full, hundreed, 0, i / n)
 		))))
 	);
-
-
+	
+	
 	// Earth
-
+	
 	rect(0, sceneSemiHeight, sceneWidth, sceneSemiHeight, color(50, 0, 80));
-
-
+	
+	
 	// Grid
-
+	
 	r(22, () => {
 		y = sceneSemiHeight + m.pow(1.3, i);
 		drawLine(0, y, sceneWidth, y);
 		drawLine(sceneSemiWidth, sceneSemiHeight, sceneWidth - sceneWidth / 21 * i, sceneHeight, color(hundreed, hundreed, full));
 	});
 	
-
-
+	
 	// City
-
+	
 	// 20 - average building size
 	r(sceneWidth / 20, () =>
 		rect(i * 20, sceneSemiHeight, rnd(14, 26), -rnd(14, 26), color(30, 0, 50))
 	);
-
+	
 	
 	// Mountains
+	
 	mountain = (x1, x3) => {
-
+		
 		dots = [[x1, sceneSemiHeight], [(x1 + x3)/2, sceneSemiHeight - hundreed], [x3, sceneSemiHeight]];
-
+		
 		r(9, () =>
 			
 			r(dots.length - 1, () => {
@@ -103,7 +101,7 @@
 				y1 = dots[currentItem-1][1];
 				x2 = dots[currentItem][0];
 				y2 = dots[currentItem][1];
-
+				
 				dots.splice(currentItem, 0, [
 					// 5 - mountain edgeness
 					(x2 + x1) / 2 + rnd(-(x2 - x1)/5, (x2 - x1)/5),
@@ -115,131 +113,18 @@
 		);
 		
 		beginPathAlias(fillStyleAlias(c[strokeStyleString] = color(25, 0, 25)));
-
+		
 		r(dots.length, () => 
 			lineToAlias(dots[i][0], dots[i][1])
 		);
-
+		
 		c.fill(strokeAlias(lineToAlias(dots[0][0], dots[0][1])));
 	};
 	
 	mountain(sceneWidth * .6, sceneWidth * 1.2);
 	mountain(sceneWidth * -.2, sceneWidth * .4);
-
-
-	// Palm
-	/*
-	var style = color(152, 0, 174);
-
-	var palm = (palmX, palmY, scale = 1) => {
-		
-		var steps = 20;
-		var nonlinearity = rnd(1.15, 1.25);
-		var right = m.round(rnd(1));
-		for (var i = 0; i < steps; i++) {
-			var size = (20 - (i*10/steps)) * scale;
-			var palmDotX = right ? (palmX - m.pow(nonlinearity, i) * scale) - size/2 : (palmX + m.pow(nonlinearity, i) * scale) - size/2;
-			var palmDotY = palmY - (20 * i) * scale - size/2;
-			rect(palmDotX, palmDotY, size, size, style);
-			
-			if (i == steps - 1) {
-				//branch(palmDotX, palmDotY, 0);
-				//branch(palmDotX, palmDotY, 1);
-			}
-			
-		}
-
-	};
-
-	var branch = (branchStartX, branchStartY, left) => {
-		var branchSize = 2;
-		var branchSteps = 60;
-		
-		for (var j = 0; j < branchSteps; j++) {
-			var branchDotX = left ? branchStartX - j * branchSize : branchStartX + j * branchSize;
-			var branchDotY = branchStartY + m.pow(1.07, j);
-			rect(branchDotX, branchDotY, branchSize, branchSize, style);
-
-			if (j % 3 == 0) {
-				leaf(branchDotX, branchDotY, left, branchSteps, j);
-			}
-		}
-	};
-
-	var leaf = (leafStartX, leafStartY, left, branchSteps, branchStep) => {
-		var leafSteps = rnd(15, 20) * (branchSteps - branchStep)/branchSteps; // ?
-		var leafDotSize = 2;
-		for (var k = 0; k < leafSteps; k++) {
-			var leafDotX = left ? leafStartX + m.pow(1.05, k) : leafStartX - m.pow(.8, k);
-			var leafDotY = leafStartY + k * leafDotSize;
-			rect(leafDotX, leafDotY, leafDotSize, leafDotSize, style);
-		}
-	};
-
-	var steps = 10;
-	for (var i = 0; i < steps; i++) {
-		xLeft = sceneSemiWidth * i / steps;
-		xRight = sceneWidth - sceneSemiWidth * i / steps;
-		y = sceneHeight - xLeft * sceneHeight/sceneWidth;
-		scale = 1 * 1 - (i / steps);
-		//rect(x, y, 1, 1, color(full,full,full));
-		palm(xLeft, y, scale);
-		palm(xRight, y, scale);
-	}
-	*/
-
-
-
-	/*
-		// Palm
-
-	var palm = (palmX, palmY, right, scale = 1) => {
-		var style = color(152, 0, 174);
-		var steps = 20;
-		var nonlinearity = rnd(1.2, 1.3);
-		for (var i = 0; i < steps; i++) {
-			var size = 20 - (i*10/steps);
-			size *= scale;
-			var x = right ? (palmX - m.pow(nonlinearity, i)) * scale : (palmX + m.pow(nonlinearity, i)) * scale;
-			var y = palmY - 20 * i;
-			y *= scale;
-			rect(x, y, size, size, style);
-			if (i == steps - 1) {
-				var steps2 = 60;
-				var size2 = 2;
-				for (var j = 0; j < steps2; j++) {
-					
-					var branch = (left) => {
-						var xx = left ? x - j * size2 : x + j * size2;
-						var yy = y + m.pow(1.07, j);
-						rect(xx, yy, size2, size2, style);
-
-						if (j % 3 == 0) {
-							var steps3 = rnd(15, 20) * (steps2 - j)/steps2;
-							var size3 = 2;
-							for (var k = 0; k < steps3; k++) {
-								var xxx = left ? xx + m.pow(1.05, k) : xx - m.pow(1.05, k);
-								var yyy = yy + k * size3;
-								rect(xxx, yyy, size3, size3, style);
-							}
-						}
-					}
-
-					branch(0);
-					branch(1);
-					
-				}
-			}
-			
-		}
-
-	}
-
-	palm(150, 600);
-	palm(1000, 550, 1);
-	palm(1200, 550, 1, .5);
-	*/
-
+	
+	
 	// Grid
 	
 	period = 128;
@@ -263,13 +148,14 @@
 			rect(0, i * period, sceneWidth, gap, color(full, full, full, opacity)
 		)
 	);
-
+	
+	
 	screenLines(5, 2, .08);
 	screenLines(23, 9, .05);
 	
 	
 	// ScreenCorners
-
+	
 	r(300, () =>
 		rect(0, sceneHeight - i, sceneWidth, 1, 
 		fillStyleAlias(color(0, 0, 0, (1-i/n)*.4)),
@@ -278,36 +164,5 @@
 		rect(i, 0, 1, sceneHeight)
 		)
 	)
-
-
-
-	/* TODO
-		Source
-			Scene
-				+ Darkness
-				Sky 
-					+ Stars
-					+ Gradient
-					+ Sun
-					Planets
-					Clouds
-				Road
-					Grid gradient
-				City
-					+ Buildings
-						Windows
-				+ Mountains
-				Palms
-				Screen-effect
-					+ Lines
-					+ Light-Corners
-					+ Grid
-					Gems
-				Sound
-			Code
-				...
-		Minifier
-			+ tokenizer
-	*/
-
-</script>
+	
+"><canvas id=a>
