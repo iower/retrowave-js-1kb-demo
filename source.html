@@ -6,7 +6,7 @@
 	c = a.getContext(`2d`);
 	beginPathAlias = () => c.beginPath();
 	strokeAlias = () => c.stroke();
-	lineToAlias = (x, y) => c.lineTo(x, y); // may be removed in future, two extra bytes
+	lineToAlias = (x, y) => c.lineTo(x, y);
 	fillStyleAlias = (s) => c.fillStyle = s;
 	strokeStyleString = `strokeStyle`;
 	full = 255;
@@ -136,17 +136,19 @@
 	
 	// Grid
 	
-	period = 128;
-	
-	r(4, () => {
-		var j = 0;
-		r(sceneWidth, () => {
-			fillStyleAlias(color(full, full, full, (j/period)*.014));
-			rect(i, 0, 1, sceneHeight);
-			rect(0, i, sceneWidth, 1);
-			j = j == period-1 ? 0 : j + 1;
-		});
-		period /= 2;
+	r(5, () => {
+		
+		period = 128 >> i,
+		
+		r(sceneWidth, () =>
+			
+			rect(i, 0, 1, sceneHeight,
+			rect(0, i, sceneWidth, 1),
+			fillStyleAlias(color(full, full, full, i % period / period * .014))
+			)
+			
+		);
+		
 	});
 	
 	
