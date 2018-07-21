@@ -79,7 +79,7 @@
 	r(22, () =>
 		
 		// Horizontal lines
-		drawLine(sceneSemiWidth, sceneSemiHeight, sceneWidth - sceneWidth / 21 * i, sceneHeight, color(hundreed, hundreed, full), 
+		drawLine(sceneSemiWidth, sceneSemiHeight, sceneWidth - sceneWidth / 21 * i, sceneHeight, color(hundreed, hundreed, full),
 		
 		// Road
 		drawLine(0, sceneSemiHeight + m.pow(1.3, i), sceneWidth)
@@ -110,15 +110,13 @@
 				
 				currentItem = n - i;
 				
-				x1 = dots[currentItem-1][0];
-				y1 = dots[currentItem-1][1];
-				x2 = dots[currentItem][0];
-				y2 = dots[currentItem][1];
+				takeNeighbourCoordinateOf = (coord1, coord2) => 
+					// 5 - mountain edgeness
+					(coord2 + coord1)/2 + rnd(-(coord2 - coord1)/5, (coord2 - coord1)/5);
 				
 				dots.splice(currentItem, 0, [
-					// 5 - mountain edgeness
-					(x2 + x1) / 2 + rnd(-(x2 - x1)/5, (x2 - x1)/5),
-					(y2 + y1) / 2 + rnd(-(y2 - y1)/5, (y2 - y1)/5)
+					takeNeighbourCoordinateOf(dots[currentItem-1][0], dots[currentItem][0]),
+					takeNeighbourCoordinateOf(dots[currentItem-1][1], dots[currentItem][1])
 				]);
 				
 			})
@@ -142,7 +140,7 @@
 	
 	r(5, () => {
 		
-		period = 128 >> i,
+		period = 128 >> i;
 		
 		r(sceneWidth, () =>
 			
