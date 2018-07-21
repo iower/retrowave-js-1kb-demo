@@ -24,7 +24,7 @@
 	r = (repeats, f) => { for (var j = 0; repeats > j; f(i=j++, n=repeats)); };
 	
 	rect = (x, y, w, h, style) =>
-		c.fillRect(x, y, w, h, style ? fillStyleAlias(style) : 0);
+		c.fillRect(x, y, w, h, fillStyleAlias(style));
 	
 	drawLine = (x, y, a, b=y, style) =>
 		strokeAlias(
@@ -74,7 +74,7 @@
 	rect(0, sceneSemiHeight, sceneWidth, sceneSemiHeight, color(50, 0, 80));
 	
 	
-	// Grid
+	// Ground grid
 	
 	r(22, () =>
 		
@@ -136,7 +136,7 @@
 	mountain(sceneWidth * -.2, sceneWidth * .4);
 	
 	
-	// Grid
+	// Camera grid
 	
 	r(5, () => {
 		
@@ -421,7 +421,7 @@
 		
 		scriptText = scriptText.replace(/\(\)=>/g, '#');
 		scriptText = scriptText.replace(/\)\)/g, '@');
-		scriptText = "eval('" + scriptText + "'.replace(/#/g,`()=>`).replace(/@/g,`))`))";
+		scriptText = "eval('" + scriptText + "'.replace(/#/g,`Z=>`).replace(/@/g,`))`))";
 
 		/*
 		scriptText = scriptText.replace(/\(\)=>/g, '#');
