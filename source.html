@@ -101,17 +101,14 @@
 				
 				currentItem = n - i;
 				
-				takeNeighbourCoordinateOf = (coord1, coord2) => 
-					// 5 - mountain edgeness
-					(coord2 + coord1)/2 + rnd(-(coord2 - coord1)/5, (coord2 - coord1)/5);
-				
-				dotsX.splice(currentItem, 0, 
-					takeNeighbourCoordinateOf(dotsX[currentItem-1], dotsX[currentItem]),
-				);
-				
-				dotsY.splice(currentItem, 0, 
-					takeNeighbourCoordinateOf(dotsY[currentItem-1], dotsY[currentItem]),
-				);
+				[dotsX, dotsY].forEach(dots =>
+					dots.splice(currentItem, 0,
+						((coord1, coord2) => 
+							// 5 - mountain edgeness
+							(coord2 + coord1)/2 + rnd(-(coord2 - coord1)/5, (coord2 - coord1)/5)
+						)(dots[currentItem-1], dots[currentItem])
+					)
+				)
 				
 			})
 			
