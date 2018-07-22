@@ -74,28 +74,22 @@
 	rect(0, sceneSemiHeight, sceneWidth, sceneSemiHeight, color(50, 0, 80));
 	
 	
-	// Ground grid
-	
 	r(22, () =>
 		
-		// Horizontal lines
+		// Horizontal ground grid lines
 		drawLine(sceneSemiWidth, sceneSemiHeight, sceneWidth - sceneWidth / 21 * i, sceneHeight, color(hundreed, hundreed, full),
 		
 		// Road
-		drawLine(0, sceneSemiHeight + m.pow(1.3, i), sceneWidth)
+		drawLine(0, sceneSemiHeight + m.pow(1.3, i), sceneWidth),
+		
+		
+		// City
+		rect(i * n + 400, sceneSemiHeight, rnd(14, 26), -rnd(14, 26), color(n, 0, 50))
 		
 		)
 		
 	);
 	
-	
-	// City
-	
-	// 20 - average building size
-	// 64 - number of buildings
-	r(64, () =>
-		rect(i * 20, sceneSemiHeight, rnd(14, 26), -rnd(14, 26), color(30, 0, 50))
-	);
 	
 	
 	// Mountains
