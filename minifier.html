@@ -19,9 +19,9 @@
 	
 	rnd = (param1, param2 = 0) => param2 + m.random() * (param1 - param2);
 	
-	color = (r, g, b, a=1) => `rgba(${r},${g},${b},${a})`;
+	color = (r, g, b, a = 1) => `rgba(${r},${g},${b},${a})`;
 	
-	r = (repeats, f) => { for (var j = 0; repeats > j; f(i=j++, n=repeats)); };
+	r = (repeats, f, j = 0) => { for (; repeats > j; f(i=j++, n=repeats)); };
 	
 	rect = (x, y, w, h, style) =>
 		c.fillRect(x, y, w, h, fillStyleAlias(style));
@@ -105,14 +105,15 @@
 				
 				currentItem = n - i;
 				
-				[dotsX, dotsY].forEach(dots =>
-					dots.splice(currentItem, 0,
-						((coord1, coord2) => 
-							// 5 - mountain edgeness
-							(coord2 + coord1)/2 + rnd(-(coord2 - coord1)/5, (coord2 - coord1)/5)
-						)(dots[currentItem-1], dots[currentItem])
-					)
-				)
+				addPoint = dots => dots.splice(currentItem, 0,
+					((coord1, coord2) => 
+						// 5 - mountain edgeness
+						(coord2 + coord1)/2 + rnd(-(coord2 - coord1)/5, (coord2 - coord1)/5)
+					)(dots[currentItem-1], dots[currentItem])
+				);
+				
+				addPoint(dotsX);
+				addPoint(dotsY);
 				
 			})
 			
