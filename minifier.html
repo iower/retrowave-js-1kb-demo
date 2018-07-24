@@ -134,9 +134,7 @@
 	
 	// Camera grid
 	
-	r(5, () => {
-		
-		period = 128 >> i;
+	r(5, () =>
 		
 		r(sceneWidth, () =>
 			
@@ -145,9 +143,9 @@
 			fillStyleAlias(color(full, full, full, i % period / period * .014))
 			)
 			
-		);
+		, period = 128 >> i)
 		
-	});
+	);
 	
 	
 	// Screenlines
