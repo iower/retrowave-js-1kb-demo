@@ -4,8 +4,8 @@
 	sceneSemiWidth = sceneWidth / 2;
 	sceneSemiHeight = sceneHeight / 2;
 	c = a.getContext(`2d`);
-	beginPathAlias = () => c.beginPath();
-	strokeAlias = () => c.stroke();
+	beginPathAlias = _ => c.beginPath();
+	strokeAlias = _ => c.stroke();
 	lineToAlias = (x, y) => c.lineTo(x, y);
 	fillStyleAlias = (s) => c.fillStyle = s;
 	strokeStyleString = `strokeStyle`;
@@ -30,12 +30,12 @@
 	
 	// Stars
 	
-	r(2e3, () =>
+	r(2e3, _ =>
 		rect(rnd(sceneWidth), rnd(sceneHeight), 2, 2, color(rnd(full), rnd(full), rnd(full), rnd(1)))
 	);
 	
 	
-	r(15, () => 
+	r(15, _ => 
 		
 		
 		// Sky gradient
@@ -70,7 +70,7 @@
 		))))
 	;
 	
-	r(22, () =>
+	r(22, _ =>
 		
 		// Horizontal ground grid lines
 		drawLine(sceneSemiWidth, sceneSemiHeight, sceneWidth - sceneWidth / 21 * i, sceneHeight,
@@ -90,34 +90,32 @@
 	
 	// Mountains
 	
-	mountain = (position) => {
+	mountain = (position, dotsX = [position - 400, position, position + 400], dotsY = [sceneSemiHeight, sceneSemiHeight - hundreed, sceneSemiHeight]) => {
 		
-		dotsX = [position - 400, position, position + 400];
-		dotsY = [sceneSemiHeight, sceneSemiHeight - hundreed, sceneSemiHeight];
 		
-		r(9, () =>
+		beginPathAlias(
 			
-			r(dotsX.length - 1, () => {
+			r(9, _ =>
 				
-				currentItem = n - i;
-				
-				addPoint = dots => dots.splice(currentItem, 0,
-					((coord1, coord2) => 
-						// 5 - mountain edgeness
-						(coord2 + coord1)/2 + rnd(-(coord2 - coord1)/5, (coord2 - coord1)/5)
-					)(dots[currentItem-1], dots[currentItem])
-				);
-				
-				addPoint(dotsX);
-				addPoint(dotsY);
-				
-			})
+				r(dotsX.length - 1, _ => {
+					
+					currentItem = n - i;
+					
+					addPoint = dots => dots.splice(currentItem, 0,
+						((coord1, coord2) => 
+							// 5 - mountain edgeness
+							(coord2 + coord1)/2 + rnd(-(coord2 - coord1)/5, (coord2 - coord1)/5)
+						)(dots[currentItem-1], dots[currentItem])
+					);
+					
+					addPoint(dotsX);
+					addPoint(dotsY);
+					
+				})
 			
-		);
+		), fillStyleAlias(c[strokeStyleString] = color(25, 0, 25)));
 		
-		beginPathAlias(fillStyleAlias(c[strokeStyleString] = color(25, 0, 25)));
-		
-		r(dotsX.length, () => 
+		r(dotsX.length, _ =>
 			lineToAlias(dotsX[i], dotsY[i])
 		);
 		
@@ -130,9 +128,9 @@
 	
 	// Camera grid
 	
-	r(5, () =>
+	r(5, _ =>
 		
-		r(sceneWidth, () =>
+		r(sceneWidth, _ =>
 			
 			rect(i, 0, 1, sceneHeight,
 			rect(0, i, sceneWidth, 1),
@@ -147,7 +145,7 @@
 	// Screenlines
 	
 	screenLines = (period, gap, opacity) => 
-		r(sceneHeight/period, () => 
+		r(sceneHeight/period, _ => 
 			rect(0, i * period, sceneWidth, gap, color(full, full, full, opacity)
 		)
 	);
@@ -159,7 +157,7 @@
 	
 	// ScreenCorners
 	
-	r(300, () =>
+	r(full, _ =>
 		rect(0, sceneHeight - i, sceneWidth, 1, 
 		fillStyleAlias(color(0, 0, 0, (1-i/n)*.4)),
 		rect(0, i, sceneWidth, 1),
