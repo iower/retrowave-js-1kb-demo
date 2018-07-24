@@ -90,9 +90,9 @@
 	
 	// Mountains
 	
-	mountain = (x1, x3) => {
+	mountain = (position) => {
 		
-		dotsX = [x1, (x1 + x3)/2, x3];
+		dotsX = [position - 400, position, position + 400];
 		dotsY = [sceneSemiHeight, sceneSemiHeight - hundreed, sceneSemiHeight];
 		
 		r(9, () =>
@@ -124,8 +124,8 @@
 		c.fill(lineToAlias(dotsX[0], dotsY[0]));
 	};
 	
-	mountain(sceneWidth * .6, sceneWidth * 1.2);
-	mountain(sceneWidth * -.2, sceneWidth * .4);
+	mountain(sceneWidth * .9);
+	mountain(sceneWidth * .1);
 	
 	
 	// Camera grid
