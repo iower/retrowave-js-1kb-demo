@@ -99,9 +99,7 @@
 				
 				r(dotsX.length - 1, _ => {
 					
-					currentItem = n - i;
-					
-					addPoint = dots => dots.splice(currentItem, 0,
+					addPoint = dots => dots.splice(currentItem = n - i, 0,
 						((coord1, coord2) => 
 							// 5 - mountain edgeness
 							(coord2 + coord1)/2 + rnd(-(coord2 - coord1)/5, (coord2 - coord1)/5)

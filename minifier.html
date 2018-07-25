@@ -103,9 +103,7 @@
 				
 				r(dotsX.length - 1, _ => {
 					
-					currentItem = n - i;
-					
-					addPoint = dots => dots.splice(currentItem, 0,
+					addPoint = dots => dots.splice(currentItem = n - i, 0,
 						((coord1, coord2) => 
 							// 5 - mountain edgeness
 							(coord2 + coord1)/2 + rnd(-(coord2 - coord1)/5, (coord2 - coord1)/5)
@@ -407,16 +405,31 @@
 		for (replacement in replacements) {
 			scriptText = scriptText.replaceAll(replacement, replacements[replacement]);
 		}
-
+		
+		/*
+		scriptText = scriptText.replace(/_=>/g, '#');
+		scriptText = scriptText.replace(/\)\)/g, '@');
+		scriptText = "eval('" + scriptText + "'.replace(/#/g,`_=>`).replace(/@/g,`))`))";
+		*/
+		
+		scriptText = scriptText.replace(/=>/g, '#');
+		scriptText = scriptText.replace(/\)\)/g, '@');
+		scriptText = "eval('" + scriptText + "'[Z=`replace`](/#/g,`=>`)[Z](/@/g,`))`))";
+		
+		
 		/*
 		scriptText = scriptText.replace(/\(\)=>/g, '#');
 		scriptText = 'eval("' + scriptText + '".replace(/#/g,"()=>"))';
 		*/
 		
-		
-		scriptText = scriptText.replace(/_=>/g, '#');
+		/*
+		scriptText = scriptText.replace(/=>/g, '~');
+		scriptText = scriptText.replace(/_~/g, '#');
 		scriptText = scriptText.replace(/\)\)/g, '@');
-		scriptText = "eval('" + scriptText + "'.replace(/#/g,`_=>`).replace(/@/g,`))`))";
+		scriptText = scriptText.replace(/=\(/g, 'Y');
+		scriptText = scriptText.replace(/fill/g, 'X');
+		scriptText = "eval('" + scriptText + "'[Z=`replace`](/#/g,`_~`)[Z](/@/g,`))`)[Z](/~/g,`=>`)[Z](/Y/g,`=(`)[Z](/X/g,`fill`))";
+		*/
 
 		/*
 		scriptText = scriptText.replace(/\(\)=>/g, '#');
