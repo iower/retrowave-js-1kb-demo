@@ -90,26 +90,24 @@
 	
 	// Mountains
 	
-	mountain = (position, dotsX = [position - 400, position, position + 400], dotsY = [sceneSemiHeight, sceneSemiHeight - hundreed, sceneSemiHeight]) => {
+	mountain = (position, dotsX = [position - 400, position, position + 400], dotsY = [sceneSemiHeight, sceneSemiHeight - hundreed, sceneSemiHeight],
 		
+		addPoint = dots => dots.splice(currentItem = n - i, 0,
+			((coord1, coord2) => 
+				// 5 - mountain edgeness
+				(coord2 + coord1)/2 + rnd(-(coord2 - coord1)/5, (coord2 - coord1)/5)
+			)(dots[currentItem-1], dots[currentItem])
+		)
+		
+	) => {
 		
 		beginPathAlias(
 			
 			r(9, _ =>
 				
-				r(dotsX.length - 1, _ => {
-					
-					addPoint = dots => dots.splice(currentItem = n - i, 0,
-						((coord1, coord2) => 
-							// 5 - mountain edgeness
-							(coord2 + coord1)/2 + rnd(-(coord2 - coord1)/5, (coord2 - coord1)/5)
-						)(dots[currentItem-1], dots[currentItem])
-					);
-					
-					addPoint(dotsX);
-					addPoint(dotsY);
-					
-				})
+				r(dotsX.length - 1, _ =>
+					addPoint(dotsX, addPoint(dotsY))
+				)
 			
 		), fillStyleAlias(c[strokeStyleString] = color(25, 0, 25)));
 		
@@ -117,7 +115,7 @@
 			lineToAlias(dotsX[i], dotsY[i])
 		);
 		
-		c.fill(lineToAlias(dotsX[0], dotsY[0]));
+		c.fill(lineToAlias(dotsX[0], dotsY[0]))
 	};
 	
 	mountain(sceneWidth * .9);
