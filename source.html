@@ -5,7 +5,6 @@
 	sceneSemiHeight = sceneHeight / 2;
 	c = a.getContext(`2d`);
 	beginPathAlias = _ => c.beginPath();
-	strokeAlias = _ => c.stroke();
 	lineToAlias = (x, y) => c.lineTo(x, y);
 	fillStyleAlias = (s) => c.fillStyle = s;
 	strokeStyleString = `strokeStyle`;
@@ -62,12 +61,11 @@
 	
 	
 	drawLine = (x, y, a, b=y) =>
-		strokeAlias(
 		lineToAlias(a, b,
 		c.moveTo(x, y,
 		beginPathAlias(
 		c[strokeStyleString] = color(hundreed, hundreed, full)
-		))))
+		))) & c.stroke()
 	;
 	
 	r(22, _ =>
