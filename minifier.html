@@ -101,7 +101,7 @@
 			)(dots[currentItem-1], dots[currentItem])
 		)
 		
-	) => {
+	) =>
 		
 		beginPathAlias(
 			
@@ -111,14 +111,15 @@
 					addPoint(dotsX, addPoint(dotsY))
 				)
 			
-		), fillStyleAlias(c[strokeStyleString] = color(25, 0, 25)));
+		), fillStyleAlias(c[strokeStyleString] = color(25, 0, 25))) &
 		
 		r(dotsX.length, _ =>
 			lineToAlias(dotsX[i], dotsY[i])
-		);
+		) &
 		
 		c.fill(lineToAlias(dotsX[0], dotsY[0]))
-	};
+		
+	;
 	
 	mountain(sceneWidth * .9);
 	mountain(sceneWidth * .1);
@@ -234,6 +235,7 @@
 			' = ': '=',
 			' == ': '==',
 			' && ': '&&',
+			' & ': '&',
 			' || ': '||',
 			' ? ': '?',
 			' : ': ':',
@@ -254,7 +256,6 @@
 			' < ': '<',
 			' > ': '>',
 			' => ': '=>',
-			
 			'; ': ';',
 			', ': ',',
 			') ': ')',
@@ -294,6 +295,7 @@
 		tokenizedText = tokenizedText.replace(/,/g, '@');
 		tokenizedText = tokenizedText.replace(/=/g, '@');
 		tokenizedText = tokenizedText.replace(/;/g, '@');
+		tokenizedText = tokenizedText.replace(/\&/g, '@');
 		tokenizedText = tokenizedText.replaceAll('.', '@');
 		tokenizedText = tokenizedText.replaceAll('\'', '@');
 		tokenizedText = tokenizedText.replaceAll('`', '@');
